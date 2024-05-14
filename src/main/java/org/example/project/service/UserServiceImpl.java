@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public User findByUserName(String email) {
+		return userRepository.findByEmail(email);
+	}
+
+	@Override
 	public List<User> findAllByStudent() {
 		return userRepository.findAllByStudent();
 	}
@@ -93,6 +98,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> searchStudentByIdAndDeptId(Long keyword, Long keyword1) {
 		return this.userRepository.searchStudentByIdAndDeptId(keyword, keyword1);
+	}
+
+	@Override
+	public List<User> findAllByLecturer() {
+		return this.userRepository.findAllByLecturer();
 	}
 
 }

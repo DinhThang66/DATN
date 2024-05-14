@@ -2,7 +2,10 @@ package org.example.project.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.project.model.*;
+import org.example.project.model.Class;
+import org.example.project.repositories.ClassRepository;
 import org.example.project.service.UserService;
+import org.example.project.service._class.ClassService;
 import org.example.project.service.course.CourseService;
 import org.example.project.service.dept.DeptService;
 import org.example.project.service.lecturer.LecturerService;
@@ -18,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class AdminController {
@@ -99,7 +99,6 @@ public class AdminController {
         if (keyword_name != null){
             list = this.courseService.searchCourseByName(keyword_name);
         }
-        model.addAttribute("list", list);
         if (keyword_dept != null && keyword_dept != 0){
             list = this.courseService.searchCourseByDept(keyword_dept);
         }
@@ -336,7 +335,7 @@ public class AdminController {
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
 
-        return "admin_pages/edit_manage/edit_test";
+        return "admin_pages/edit_manage/edit_lecturer";
     }
 
     @PostMapping("/edit_lecturer")
@@ -345,12 +344,12 @@ public class AdminController {
                                   @Param("position") String position,
                                   @Param("salary") Integer salary) {
 
-        Lecturer lecturer = new Lecturer(user.getId(), null, null , null, null);
+        Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position , salary, null);
         if (this.userService.update(user)) {
             if (this.lecturerService.update(lecturer))
                 return "redirect:/list_lecturer_" + user.getDepartment().getId();
         }
-        return "redirect:/dept_management";
+        return "admin_pages/list_lecturer";
     }
 
     @GetMapping("/delete_lecturer_{id}")
@@ -361,6 +360,80 @@ public class AdminController {
             return "redirect:/list_lecturer_" + user.getDepartment().getId();
         return "admin_pages/list_lecturer";
     }
+
+
+    // Class ===========================
+
+    @Autowired
+    private ClassService classService;
+
+    @GetMapping("class_management")
+    public String class_management (Model model) {
+        List<Class> list = this.classService.getAll();
+        model.addAttribute("list", list);
+
+        List<Department> list1 = this.deptService.getAll();
+        model.addAttribute("list1", list1);
+
+        List<User> list2 = this.userService.findAllByLecturer();
+        model.addAttribute("list2", list2);
+
+        List<Course> list3 = this.courseService.getAll();
+        model.addAttribute("list3", list3);
+
+        Class _class = new Class();
+        model.addAttribute("class", _class);
+
+
+        return "admin_pages/manage/class_management";
+    }
+    @PostMapping("/add_class")
+    public String save_class(@ModelAttribute("class") Class _class) {
+        if (this.classService.create(_class)) {
+            return "redirect:/class_management";
+        }
+        return "redirect:/class_management";
+    }
+
+    @GetMapping("/edit_class_{id}")
+    public String edit_class(Model model, @PathVariable Long id) {
+        Class _class = this.classService.findById(id);
+        model.addAttribute("class", _class);
+
+        List<User> list2 = this.userService.findAllByLecturer();
+        model.addAttribute("list2", list2);
+
+        List<Course> list3 = this.courseService.getAll();
+        model.addAttribute("list3", list3);
+
+        Set<Student> students = _class.getStudents();
+        model.addAttribute("list4", students);
+
+
+
+        return "admin_pages/edit_manage/edit_class";
+    }
+
+
+
+
+    @PostMapping("/edit_class")
+    public String update_class(@ModelAttribute("class") Class _class) {
+        if (this.classService.create(_class)) {
+            return "redirect:/class_management";
+
+        }
+        return "admin_pages/manage/class_management";
+    }
+
+    @GetMapping("/delete_class_{id}")
+    public String delete_class(@PathVariable("id") Long id) {
+        Class _class = this.classService.findById(id);
+        if (this.classService.delete(id))
+            return "redirect:/class_management";
+        return "admin_pages/manage/class_management";
+    }
+
 
 
     // Func ===========================

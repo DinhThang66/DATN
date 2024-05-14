@@ -17,6 +17,8 @@ public class  User {
 	private String yearOfAdmission;
 	private String gender;
 
+
+
 	public String getGender() {
 		return gender;
 	}

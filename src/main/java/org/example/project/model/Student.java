@@ -2,6 +2,8 @@ package org.example.project.model;
 
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "students")
 public class Student {
@@ -11,23 +13,30 @@ public class Student {
     private String educationLevel;
     private String educationProgram;
     private String className;
-
-
     @OneToOne
     @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
+    @ManyToMany(mappedBy = "students")
+    Set<Class> classes;
 
 
     public Student() {
         super();
     }
-
     public Student(Long id, String educationLevel, String educationProgram, String className, User user) {
         this.id = id;
         this.educationLevel = educationLevel;
         this.educationProgram = educationProgram;
         this.className = className;
         this.user = user;
+    }
+
+    public Set<Class> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(Set<Class> classes) {
+        this.classes = classes;
     }
 
     public Long getId() {

@@ -2,6 +2,8 @@ package org.example.project.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "lecturer")
 public class Lecturer {
@@ -11,10 +13,21 @@ public class Lecturer {
     private String educationLevel;
     private String position;
     private Integer salary;
-
     @OneToOne
     @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
+    @OneToMany(mappedBy = "lecturer")
+    private List<Class> classes;
+
+
+
+    public List<Class> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<Class> classes) {
+        this.classes = classes;
+    }
 
     public Lecturer() {
         super();

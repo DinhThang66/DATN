@@ -95,14 +95,13 @@
             </li>
             <script src="../assets/js/alpine.js" async></script>
 
-
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                   href="./pages/lecturer_management.html">
+                   href="/class_management">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
                     </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Quản lý giảng viên</span>
+                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Tạo lớp học</span>
                 </a>
             </li>
 
@@ -217,7 +216,7 @@
                                         <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
                                             Mã số giảng viên</label>
                                         <input th:field="*{id}"
-                                               type="text"
+                                               type="text" readonly
                                                class="bg-white focus:shadow-primary-utline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                                     </div>
                                 </div>
@@ -256,21 +255,33 @@
 
                                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                                     <div class="">
-                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
+                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
+                                               for="educationLevel">
                                             Trình độ</label>
-                                        <input name="educationLevel"  th:field="*{lecturer.educationLevel}"
-                                               type="text"
-                                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
+                                        <select id="educationLevel"
+                                                class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                                                name="educationLevel">
+
+                                            <option value="0" th:selected="${user.lecturer.educationLevel == '0'}"> Cử nhân</option>
+                                            <option value="1" th:selected="${user.lecturer.educationLevel == '1'}"> Thạc sĩ/ Kỹ sư</option>
+                                            <option value="2" th:selected="${user.lecturer.educationLevel == '2'}"> Phó giáo sư-Tiến sĩ</option>
+                                            <option value="3" th:selected="${user.lecturer.educationLevel == '3'}"> Giáo sư-Tiến sĩ</option>
+                                        </select>
+
                                     </div>
                                 </div>
 
                                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                                     <div class="">
-                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
+                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
+                                               for="position">
                                             Chức vụ</label>
-                                        <input name="position"  th:field="*{lecturer.position}"
-                                               type="text" readonly
-                                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
+                                        <select id="position"
+                                                class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                                                name="educationLevel">
+                                            <option value="0" th:selected="${user.lecturer.position == '0'}"> Giảng Viên</option>
+                                            <option value="1" th:selected="${user.lecturer.position == '0'}"> Viện trưởng</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -292,11 +303,17 @@
 
                                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                                     <div class="">
-                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
+                                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
+                                               for="gender">
                                             Giới tính</label>
-                                        <input th:field="*{gender}"
-                                               type="text"
-                                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
+                                        <select id="gender"
+                                                class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                                                name="gender">
+                                            <option value="-1" th:selected="${user.gender != '0' && user.gender != '1'}"> Chưa chọn</option>
+
+                                            <option value="0" th:selected="${user.gender == '0'}"> Nam</option>
+                                            <option value="1" th:selected="${user.gender == '1'}"> Nữ</option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -304,8 +321,8 @@
                                     <div class="">
                                         <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
                                             Lương</label>
-                                        <input name="salary"  th:field="*{lecturer.salary}"
-                                               type="text"
+                                        <input name="salary" th:value="*{lecturer.salary}"
+                                               type="text" readonly
                                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                                     </div>
                                 </div>
@@ -390,7 +407,7 @@
                         <hr class="h-px mt-2 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent"/>
                         <button id="button_add" type="submit"
                                 class="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
-                            Thêm mới
+                            Thay đổi
                         </button>
                     </form>
 

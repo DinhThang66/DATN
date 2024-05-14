@@ -3,6 +3,8 @@ package org.example.project.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "course")
 public class Course {
@@ -16,6 +18,19 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private List<Class> classes;
+
+    public List<Class> getClasses() {
+        return classes;
+    }
+
+    public void setClasses(List<Class> classes) {
+        this.classes = classes;
+    }
+
     public Course() {
         super();
     }

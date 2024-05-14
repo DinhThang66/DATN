@@ -1,6 +1,7 @@
 package org.example.project.controller;
 
 
+import jakarta.servlet.http.HttpSession;
 import org.example.project.dto.UserDto;
 import org.example.project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,8 @@ public class UserController {
 		model.addAttribute("user", userDetails);
 		return "user";
 	}
-	
+
+
 	@GetMapping("admin_page")
 	public String adminPage (Model model, Principal principal) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
@@ -63,5 +65,18 @@ public class UserController {
 		model.addAttribute("user", userDetails);
 		return "admin_pages/profile";
 	}
+	@GetMapping("student-page")
+	public String studentPage (Model model, Principal principal, HttpSession session) {
+		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+
+		model.addAttribute("user", userDetails);
+
+		session.setAttribute("user", userDetails);
+
+
+		return "student_pages/index";
+	}
+
+
 
 }

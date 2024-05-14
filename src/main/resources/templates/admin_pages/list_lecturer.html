@@ -95,14 +95,13 @@
             </li>
             <script src="../assets/js/alpine.js" async></script>
 
-
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                   href="./pages/lecturer_management.html">
+                   href="/class_management">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
                     </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Quản lý giảng viên</span>
+                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Tạo lớp học</span>
                 </a>
             </li>
 
@@ -281,12 +280,12 @@
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
                                             <a type="button" th:href="@{/edit_lecturer_{id}(id=${user.id})}"
-                                                    class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
+                                               class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
                                                 <img src="../assets/img/ic/ic_edit.svg" class="w-4 h-4" alt="Icon">
                                             </a>
                                             <a type="button" th:href="@{/delete_lecturer_{id}(id=${user.id})}"
-                                                    class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
-                                                    onclick="return confirm('Bạn có chắc chắn xóa giảng viên này không?')">
+                                               class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
+                                               onclick="return confirm('Bạn có chắc chắn xóa giảng viên này không?')">
                                                 <img src="../assets/img/ic/ic_delete.svg" class="w-4 h-4" alt="Icon">
                                             </a>
                                         </div>
@@ -389,7 +388,7 @@
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
                         <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
-                        for="educationLevel">
+                               for="educationLevel">
                             Trình độ</label>
                         <select id="educationLevel"
                                 class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
@@ -404,12 +403,15 @@
 
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
-                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
+                        <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
+                               for="position">
                             Chức vụ</label>
-                        <input name="position"
-                               type="text"
-                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
-
+                        <select id="position"
+                                class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
+                                name="educationLevel">
+                            <option value="0" selected> Giảng Viên</option>
+                            <option value="1"> Viện trưởng</option>
+                        </select>
                     </div>
                 </div>
 
@@ -454,8 +456,8 @@
                         <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80">
                             Email</label>
                         <input
-                               type="text"
-                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
+                                type="text"
+                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                     </div>
                 </div>
 

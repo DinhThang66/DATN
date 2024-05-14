@@ -11,6 +11,8 @@ public interface UserService {
 	User save (UserDto userDto);
 
 	User findById(Long id);
+	User findByUserName(String email);
+
 	List<User> findAllByStudent();
 	List<User> findAllByStudentInDept(Long id);
 	Boolean update(User user);
@@ -21,5 +23,6 @@ public interface UserService {
 	Integer numberOfStudentsInLecturer(Long id);
 	List<User> findAllByLecturerInDept(Long id);
 	List<User> searchStudentByIdAndDeptId(Long keyword, Long keyword1);
+	List<User> findAllByLecturer();
 
 }
