@@ -1,6 +1,5 @@
 package org.example.project.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,14 +20,14 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    private List<Class> classes;
+    private List<CourseClass> courseClasses;
 
-    public List<Class> getClasses() {
-        return classes;
+    public List<CourseClass> getClasses() {
+        return courseClasses;
     }
 
-    public void setClasses(List<Class> classes) {
-        this.classes = classes;
+    public void setClasses(List<CourseClass> courseClasses) {
+        this.courseClasses = courseClasses;
     }
 
     public Course() {

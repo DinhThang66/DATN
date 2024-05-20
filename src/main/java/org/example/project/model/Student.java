@@ -17,7 +17,7 @@ public class Student {
     @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
     @ManyToMany(mappedBy = "students")
-    Set<Class> classes;
+    Set<CourseClass> courseClasses;
 
 
     public Student() {
@@ -31,12 +31,12 @@ public class Student {
         this.user = user;
     }
 
-    public Set<Class> getClasses() {
-        return classes;
+    public Set<CourseClass> getClasses() {
+        return courseClasses;
     }
 
-    public void setClasses(Set<Class> classes) {
-        this.classes = classes;
+    public void setClasses(Set<CourseClass> courseClasses) {
+        this.courseClasses = courseClasses;
     }
 
     public Long getId() {

@@ -2,8 +2,7 @@ package org.example.project.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.project.model.*;
-import org.example.project.model.Class;
-import org.example.project.repositories.ClassRepository;
+import org.example.project.model.CourseClass;
 import org.example.project.service.UserService;
 import org.example.project.service._class.ClassService;
 import org.example.project.service.course.CourseService;
@@ -13,12 +12,10 @@ import org.example.project.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.*;
@@ -369,7 +366,7 @@ public class AdminController {
 
     @GetMapping("class_management")
     public String class_management (Model model) {
-        List<Class> list = this.classService.getAll();
+        List<CourseClass> list = this.classService.getAll();
         model.addAttribute("list", list);
 
         List<Department> list1 = this.deptService.getAll();
@@ -381,15 +378,15 @@ public class AdminController {
         List<Course> list3 = this.courseService.getAll();
         model.addAttribute("list3", list3);
 
-        Class _class = new Class();
-        model.addAttribute("class", _class);
+        CourseClass _Course_class = new CourseClass();
+        model.addAttribute("class", _Course_class);
 
 
         return "admin_pages/manage/class_management";
     }
     @PostMapping("/add_class")
-    public String save_class(@ModelAttribute("class") Class _class) {
-        if (this.classService.create(_class)) {
+    public String save_class(@ModelAttribute("class") CourseClass _Course_class) {
+        if (this.classService.create(_Course_class)) {
             return "redirect:/class_management";
         }
         return "redirect:/class_management";
@@ -397,8 +394,8 @@ public class AdminController {
 
     @GetMapping("/edit_class_{id}")
     public String edit_class(Model model, @PathVariable Long id) {
-        Class _class = this.classService.findById(id);
-        model.addAttribute("class", _class);
+        CourseClass _Course_class = this.classService.findById(id);
+        model.addAttribute("class", _Course_class);
 
         List<User> list2 = this.userService.findAllByLecturer();
         model.addAttribute("list2", list2);
@@ -406,7 +403,7 @@ public class AdminController {
         List<Course> list3 = this.courseService.getAll();
         model.addAttribute("list3", list3);
 
-        Set<Student> students = _class.getStudents();
+        Set<Student> students = _Course_class.getStudents();
         model.addAttribute("list4", students);
 
 
@@ -418,8 +415,8 @@ public class AdminController {
 
 
     @PostMapping("/edit_class")
-    public String update_class(@ModelAttribute("class") Class _class) {
-        if (this.classService.create(_class)) {
+    public String update_class(@ModelAttribute("class") CourseClass _Course_class) {
+        if (this.classService.create(_Course_class)) {
             return "redirect:/class_management";
 
         }
@@ -428,7 +425,7 @@ public class AdminController {
 
     @GetMapping("/delete_class_{id}")
     public String delete_class(@PathVariable("id") Long id) {
-        Class _class = this.classService.findById(id);
+        CourseClass _Course_class = this.classService.findById(id);
         if (this.classService.delete(id))
             return "redirect:/class_management";
         return "admin_pages/manage/class_management";

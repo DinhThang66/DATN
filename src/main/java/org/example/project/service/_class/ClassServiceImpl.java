@@ -1,6 +1,6 @@
 package org.example.project.service._class;
 
-import org.example.project.model.Class;
+import org.example.project.model.CourseClass;
 import org.example.project.model.Student;
 import org.example.project.repositories.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,14 @@ public class ClassServiceImpl implements ClassService{
     @Autowired
     private ClassRepository classRepository;
     @Override
-    public List<Class> getAll() {
+    public List<CourseClass> getAll() {
         return this.classRepository.findAll();
     }
 
     @Override
-    public Boolean create(Class _class) {
+    public Boolean create(CourseClass _Course_class) {
         try{
-            this.classRepository.save(_class);
+            this.classRepository.save(_Course_class);
             return true;
         }catch (Exception e){
             e.printStackTrace();
@@ -32,7 +32,7 @@ public class ClassServiceImpl implements ClassService{
     }
 
     @Override
-    public Class findById(Long id) {
+    public CourseClass findById(Long id) {
         return this.classRepository.findById(id).get();
     }
 
@@ -52,10 +52,10 @@ public class ClassServiceImpl implements ClassService{
         return null;
     }
     public List<Student> getStudentsByClassId(Long ClassId) {
-        Optional<Class> authorOptional = classRepository.findById(ClassId);
+        Optional<CourseClass> authorOptional = classRepository.findById(ClassId);
         if (authorOptional.isPresent()) {
-            Class _class = authorOptional.get();
-            return new ArrayList<>(_class.getStudents());
+            CourseClass _Course_class = authorOptional.get();
+            return new ArrayList<>(_Course_class.getStudents());
         } else {
             // Handle case when author with given id is not found
             return Collections.emptyList();

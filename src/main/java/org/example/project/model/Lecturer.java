@@ -17,16 +17,16 @@ public class Lecturer {
     @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
     @OneToMany(mappedBy = "lecturer")
-    private List<Class> classes;
+    private List<CourseClass> courseClasses;
 
 
 
-    public List<Class> getClasses() {
-        return classes;
+    public List<CourseClass> getClasses() {
+        return courseClasses;
     }
 
-    public void setClasses(List<Class> classes) {
-        this.classes = classes;
+    public void setClasses(List<CourseClass> courseClasses) {
+        this.courseClasses = courseClasses;
     }
 
     public Lecturer() {
