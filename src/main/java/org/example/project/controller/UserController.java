@@ -69,6 +69,18 @@ public class UserController {
 		return "student_pages/index";
 	}
 
+	@GetMapping("lecturer-page")
+	public String lecturerPage (Model model, Principal principal, HttpSession session) {
+		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+
+		model.addAttribute("user", userDetails);
+
+		session.setAttribute("user", userDetails);
+
+
+		return "lecturer_pages/index";
+	}
+
 
 
 }

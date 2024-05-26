@@ -12,7 +12,7 @@ public class Course {
     private Long id;
     private String course_id;
     private String name;
-    private String sessionDuration;     //(Ca/kíp)
+    private Integer sessionDuration;     //(Ca/kíp)
     private Integer numberOfCredit;
     @ManyToOne
     @JoinColumn(name = "department_id")
@@ -34,13 +34,29 @@ public class Course {
         super();
     }
 
-    public Course(Long id, String course_id, String name, String sessionDuration, Integer numberOfCredit, Department department) {
+    public Course(Long id, String course_id, String name, Integer sessionDuration, Integer numberOfCredit, Department department) {
         this.id = id;
         this.course_id = course_id;
         this.name = name;
         this.sessionDuration = sessionDuration;
         this.numberOfCredit = numberOfCredit;
         this.department = department;
+    }
+
+    public Integer getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(Integer sessionDuration) {
+        this.sessionDuration = sessionDuration;
+    }
+
+    public List<CourseClass> getCourseClasses() {
+        return courseClasses;
+    }
+
+    public void setCourseClasses(List<CourseClass> courseClasses) {
+        this.courseClasses = courseClasses;
     }
 
     public Long getId() {
@@ -73,14 +89,6 @@ public class Course {
 
     public void setNumberOfCredit(Integer numberOfCredit) {
         this.numberOfCredit = numberOfCredit;
-    }
-
-    public String getSessionDuration() {
-        return sessionDuration;
-    }
-
-    public void setSessionDuration(String sessionDuration) {
-        this.sessionDuration = sessionDuration;
     }
 
     public Department getDepartment() {

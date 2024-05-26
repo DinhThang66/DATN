@@ -135,7 +135,7 @@ public class HtmlOutput
 		int nr = solution.getConfiguration().getNumberOfRooms();
 
 		Map<Point, int[]> slotTable = new HashMap<>();
-		Map<Point, String[]> timeTable = generateTimeTable(solution, slotTable);
+ 		Map<Point, String[]> timeTable = generateTimeTable(solution, slotTable);
 		if (slotTable.isEmpty() || timeTable.isEmpty())
 			return "";
 
@@ -180,5 +180,6 @@ public class HtmlOutput
 
 		return sb.toString();
 	}
+
 
 }

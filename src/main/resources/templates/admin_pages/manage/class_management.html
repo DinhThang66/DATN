@@ -192,12 +192,29 @@
                 <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                     <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between">
                         <h6 class="dark:text-white">Danh sách lớp học</h6>
-                        <button type="button"
-                                class="inline-flex items-center px-2 py-3 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md"
-                                onclick="showDialog_add()">
-                            <img src="../assets/img/ic/ic_add.svg" class="w-5 h-5 mr-1 text-white" alt="Icon">
-                            <span>Thêm mới</span>
-                        </button>
+                        <div>
+
+                            <form
+                                    class="inline-flex items-center font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-600 to-orange-600 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
+                                <a th:href="@{/scheduled}" type="button" class="inline-flex items-center px-2 py-3 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-600 to-orange-600 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md"
+                                   onclick="return confirm('Bạn có chắc chắn xếp lịch học cho tất cả các lớp không?')">
+                                    <img src="../assets/img/ic/ic_refresh.svg" class="w-5 h-5 mr-1 text-white" alt="Icon">
+                                    <span>Xếp lịch</span>
+                                </a>
+
+                            </form>
+
+                            <button type="button"
+                                    class="inline-flex items-center px-2 py-3 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md"
+                                    onclick="showDialog_add()">
+                                <img src="../assets/img/ic/ic_add.svg" class="w-5 h-5 mr-1 text-white" alt="Icon">
+                                <span>Thêm mới</span>
+                            </button>
+
+                        </div>
+
+
+
                     </div>
 
                     <form class="flex flex-wrap">
@@ -243,8 +260,8 @@
                                 </button>
                             </div>
                         </div>
-
                     </form>
+
 
                     <div class="flex-auto px-0 pt-0 pb-2">
                         <div class="p-0 overflow-x-auto">
@@ -263,11 +280,14 @@
                                     <th class="px-6 py-3 w-50 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
                                         Giảng viên
                                     </th>
-                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Thời lượng
-                                    </th>
                                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
                                         Viện quản lý
+                                    </th>
+                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
+                                        Phòng học
+                                    </th>
+                                    <th class="px-6 py-3 w-50 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                        Lịch học
                                     </th>
                                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         Thao tác
@@ -300,14 +320,16 @@
 
                                     <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            th:text="${class.course.sessionDuration}"></h6>
-                                    </td>
-
-                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
-                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
                                             th:text="${class.course.department.name}"></h6>
                                     </td>
-
+                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
+                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
+                                            th:text="${class.room}"></h6>
+                                    </td>
+                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
+                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
+                                            th:text="${class.schedule}"></h6>
+                                    </td>
                                     <td class="align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
 

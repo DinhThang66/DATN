@@ -28,6 +28,28 @@ public class CourseClass implements Comparable<CourseClass>
 			NumberOfSeats += group.NumberOfStudents;
 		}
 	}
+	public CourseClass(int id, Professor professor, Course course, boolean requiresLab, int duration, StudentsGroup... groups)
+	{
+		Id = id;
+		Professor = professor;
+		Course = course;
+		NumberOfSeats = 0;
+		LabRequired = requiresLab;
+		Duration = duration;
+		Groups = new ArrayList<StudentsGroup>();
+
+		// bind professor to class
+		Professor.addCourseClass(this);
+
+		// bind student groups to class
+		for(StudentsGroup group : groups)
+		{
+			group.addClass(this);
+			Groups.add(group);
+			NumberOfSeats += group.NumberOfStudents;
+		}
+	}
+
 
 	// Trả về TRUE nếu lớp khác có một hoặc các nhóm sinh viên chồng chéo.
 	public boolean groupsOverlap(CourseClass c)

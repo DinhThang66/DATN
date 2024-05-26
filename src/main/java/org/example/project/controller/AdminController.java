@@ -1,10 +1,16 @@
 package org.example.project.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.project.gaSchedule.HtmlOutput;
+import org.example.project.gaSchedule.algorithm.Cso;
+import org.example.project.gaSchedule.model.Configuration;
+import org.example.project.gaSchedule.model.Reservation;
+import org.example.project.gaSchedule.model.Room;
+import org.example.project.gaSchedule.model.Schedule;
 import org.example.project.model.*;
 import org.example.project.model.CourseClass;
 import org.example.project.service.UserService;
-import org.example.project.service._class.ClassService;
+import org.example.project.service.courseClass.CourseClassService;
 import org.example.project.service.course.CourseService;
 import org.example.project.service.dept.DeptService;
 import org.example.project.service.lecturer.LecturerService;
@@ -17,8 +23,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
+import java.io.*;
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -87,7 +97,7 @@ public class AdminController {
 
     @GetMapping("course_management")
     public String course_management (Model model,  @Param("keyword_id") String keyword_id ,@Param("keyword_name") String keyword_name,
-                                     @Param("keyword_dept") Long keyword_dept) {
+                                     @Param("keyword_dept") Long keyword_dept)  {
         List<Course> list = this.courseService.getAll();
 
         if (keyword_id != null){
@@ -362,11 +372,11 @@ public class AdminController {
     // Class ===========================
 
     @Autowired
-    private ClassService classService;
+    private CourseClassService courseClassService;
 
     @GetMapping("class_management")
     public String class_management (Model model) {
-        List<CourseClass> list = this.classService.getAll();
+        List<CourseClass> list = this.courseClassService.getAll();
         model.addAttribute("list", list);
 
         List<Department> list1 = this.deptService.getAll();
@@ -386,7 +396,7 @@ public class AdminController {
     }
     @PostMapping("/add_class")
     public String save_class(@ModelAttribute("class") CourseClass _Course_class) {
-        if (this.classService.create(_Course_class)) {
+        if (this.courseClassService.create(_Course_class)) {
             return "redirect:/class_management";
         }
         return "redirect:/class_management";
@@ -394,7 +404,7 @@ public class AdminController {
 
     @GetMapping("/edit_class_{id}")
     public String edit_class(Model model, @PathVariable Long id) {
-        CourseClass _Course_class = this.classService.findById(id);
+        CourseClass _Course_class = this.courseClassService.findById(id);
         model.addAttribute("class", _Course_class);
 
         List<User> list2 = this.userService.findAllByLecturer();
@@ -406,6 +416,13 @@ public class AdminController {
         Set<Student> students = _Course_class.getStudents();
         model.addAttribute("list4", students);
 
+        int index = 0;
+        for (Student student : _Course_class.getStudents()){
+            index++;
+        }
+        model.addAttribute("numberOfStudents", index);
+
+
 
 
         return "admin_pages/edit_manage/edit_class";
@@ -416,7 +433,7 @@ public class AdminController {
 
     @PostMapping("/edit_class")
     public String update_class(@ModelAttribute("class") CourseClass _Course_class) {
-        if (this.classService.create(_Course_class)) {
+        if (this.courseClassService.create(_Course_class)) {
             return "redirect:/class_management";
 
         }
@@ -425,10 +442,74 @@ public class AdminController {
 
     @GetMapping("/delete_class_{id}")
     public String delete_class(@PathVariable("id") Long id) {
-        CourseClass _Course_class = this.classService.findById(id);
-        if (this.classService.delete(id))
+        CourseClass _Course_class = this.courseClassService.findById(id);
+        if (this.courseClassService.delete(id))
             return "redirect:/class_management";
         return "admin_pages/manage/class_management";
+    }
+
+    String[] WEEK_DAYS = { "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6"};
+    @GetMapping("/scheduled")
+    public String scheduled() throws SQLException {
+        final long startTime = System.currentTimeMillis();
+        Configuration configuration = new Configuration();
+
+        configuration.loadFromDatabase();
+        Cso<Schedule> alg = new Cso<>(new Schedule(configuration), 2,
+                2, 80, 3);
+
+        alg.run(9999, 0.999);
+
+        String htmlResult = HtmlOutput.getResult(alg.getResult());
+
+
+        Map<org.example.project.gaSchedule.model.CourseClass, Integer> classes = alg.getResult().getClasses();
+
+        for (org.example.project.gaSchedule.model.CourseClass cc : classes.keySet()){
+            // coordinate of time-space slot
+            Reservation reservation = Reservation.getReservation(classes.get(cc));
+            int dayId = reservation.getDay() + 1;
+            int periodId = reservation.getTime() + 1;
+            int roomId = reservation.getRoom();
+
+            CourseClass courseClass = this.courseClassService.findById((long) cc.Id);
+
+            Room room = alg.getResult().getConfiguration().getRoomById(roomId);
+            courseClass.setRoom(room.Name);
+            courseClass.setSchedule(WEEK_DAYS[dayId - 1] + " , " +String.valueOf(courseClass.getCourse().getSessionDuration())
+                    + " tiết, bắt đầu từ kíp "+ String.valueOf(periodId));
+
+            if (this.courseClassService.create(courseClass)) {
+
+            }
+
+
+        }
+
+
+
+        String tempFilePath = System.getProperty("java.io.tmpdir") + "GaSchedule.htm";
+        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFilePath))))
+        {
+            writer.write(htmlResult);
+            writer.flush();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        double seconds = (System.currentTimeMillis() - startTime) / 1000.0;
+        System.out.println(String.format("\nCompleted in %f secs.", seconds));
+        try {
+            Desktop.getDesktop().open(new File(tempFilePath));
+        } catch (Exception ex) {
+            // no application registered for html
+        }
+
+
+
+        return "redirect:/class_management";
     }
 
 
@@ -449,4 +530,6 @@ public class AdminController {
         }
         return username.toString();
     }
+
+
 }

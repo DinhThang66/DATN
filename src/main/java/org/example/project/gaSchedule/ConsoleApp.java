@@ -15,8 +15,8 @@ public class ConsoleApp
 {
     public static void main(String[] args)
     {
-    	try {	
-	        final String FILE_NAME = args.length > 0 ? args[0] : "GaSchedule.json";
+    	try {
+			final String FILE_NAME = args.length > 0 ? args[0] : "GaSchedule.json";
 	        final long startTime = System.currentTimeMillis();
 
 	        Configuration configuration = new Configuration();

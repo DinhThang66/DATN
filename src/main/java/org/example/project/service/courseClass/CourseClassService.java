@@ -1,4 +1,4 @@
-package org.example.project.service._class;
+package org.example.project.service.courseClass;
 
 import org.example.project.model.CourseClass;
 import org.example.project.model.Student;
@@ -6,7 +6,7 @@ import org.example.project.model.Student;
 
 import java.util.List;
 
-public interface ClassService {
+public interface CourseClassService {
     List<CourseClass> getAll();
     Boolean create(CourseClass _Course_class);
     CourseClass findById(Long id);

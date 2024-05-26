@@ -1,26 +1,30 @@
 package org.example.project.gaSchedule.model;
 
-
+import org.example.project.service.course.CourseService;
 
 import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+class DatabaseUtil {
+	private static final String URL = "jdbc:mysql://localhost:3306/demo";
+	private static final String USER = "root";
+	private static final String PASSWORD = "thang2002";
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
+	public static Connection getConnection() throws SQLException {
+		return DriverManager.getConnection(URL, USER, PASSWORD);
+	}
+}
 
-import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
+
 
 // Đọc file cấu hình và lưu trữ các đối tượng được phân tích cú pháp
 public class Configuration
@@ -47,8 +51,9 @@ public class Configuration
 		_courseClasses = new ArrayList<>();
 	}
 
-	private Map<Integer, Professor> loadProfessors(){
+	private Map<Integer, Professor> loadProfessors() throws SQLException{
 		Map<Integer, Professor> professors = new TreeMap<>();
+		/*
 		professors.put(1, new Professor(1, "Victor"));
 		professors.put(2, new Professor(2, "Red"));
 		professors.put(3, new Professor(3, "Philip"));
@@ -64,6 +69,20 @@ public class Configuration
 		professors.put(13, new Professor(13, "Alex"));
 
 
+		 */
+		String query = "SELECT id, fullname FROM users u where u.role = 'lecturer'";
+		try (Connection conn = DatabaseUtil.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(query);
+			 ResultSet rs = stmt.executeQuery()) {
+
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("fullname");
+				professors.put(id, new Professor(id, name));
+			}
+		}
+
+
 		return professors;
 	}
 	private Map<Integer, StudentsGroup> loadStudentsGroups() {
@@ -76,8 +95,9 @@ public class Configuration
 		return studentGroups;
 	}
 
-	private Map<Integer, Course> loadCourses() {
+	private Map<Integer, Course> loadCourses() throws SQLException{
 		Map<Integer, Course> courses = new TreeMap<>();
+		/*
 		courses.put(1, new Course(1, "Introduction to Programming"));
 		courses.put(2, new Course(2, "Introduction to Computer Architecture"));
 		courses.put(3, new Course(3, "Business Applications"));
@@ -86,95 +106,57 @@ public class Configuration
 		courses.put(6, new Course(6, "Linear Algebra"));
 		courses.put(7, new Course(7, "Introduction to Information Technology I"));
 		courses.put(8, new Course(8, "System Administration and Maintenance I"));
+		 */
+
+		String query = "SELECT id, name, session_duration FROM course";
+
+		try (Connection conn = DatabaseUtil.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(query);
+			 ResultSet rs = stmt.executeQuery()) {
+
+			int index = 1;
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				int session_duration = rs.getInt("session_duration");
+
+				String name = rs.getString("name");
+				courses.put(index++, new Course(id, name, session_duration));
+			}
+		}
 
 		return courses;
 	}
 
 	private Map<Integer, Room> loadRooms() {
 		Map<Integer, Room> rooms = new TreeMap<>();
-		rooms.put(0, new Room("R4", false, 12));
+		rooms.put(0, new Room("R4", false, 50));
 		rooms.put(1, new Room("R6", true, 50));
 		rooms.put(2, new Room("R7", true, 60));
 
 		return rooms;
 	}
 
-	private List<CourseClass> loadCourseClasses() {
+	private List<CourseClass> loadCourseClasses() throws SQLException{
 		List<CourseClass> courseClasses = new ArrayList<>();
-		List<StudentsGroup> groups = new ArrayList<>();
-		groups.add(_studentGroups.get(3));
-		groups.add(_studentGroups.get(4));
+		String query = "SELECT id, lecturer_id, course_id FROM class";
+		try (Connection conn = DatabaseUtil.getConnection();
+			 PreparedStatement stmt = conn.prepareStatement(query);
+			 ResultSet rs = stmt.executeQuery()) {
 
-		courseClasses.add(new CourseClass(_professors.get(1), _courses.get(1), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
+			int index = 1;
+			while (rs.next()) {
+				long id = rs.getLong("id");
 
-		groups.add(_studentGroups.get(1));
-		courseClasses.add(new CourseClass(_professors.get(9), _courses.get(1), true, 3, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(2));
-		courseClasses.add(new CourseClass(_professors.get(9), _courses.get(1), true, 3, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(3));
-		courseClasses.add(new CourseClass(_professors.get(9), _courses.get(1), true, 3, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(4));
-		courseClasses.add(new CourseClass(_professors.get(9), _courses.get(1), true, 3, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(3));
-		groups.add(_studentGroups.get(4));
-		courseClasses.add(new CourseClass(_professors.get(2), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(1));
-		groups.add(_studentGroups.get(2));
-		courseClasses.add(new CourseClass(_professors.get(2), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(1));
-		courseClasses.add(new CourseClass(_professors.get(3), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(2));
-		courseClasses.add(new CourseClass(_professors.get(3), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(3));
-		courseClasses.add(new CourseClass(_professors.get(3), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(4));
-		courseClasses.add(new CourseClass(_professors.get(3), _courses.get(2), false, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(3));
-		groups.add(_studentGroups.get(4));
-		courseClasses.add(new CourseClass(_professors.get(4), _courses.get(4), true, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(3));
-		groups.add(_studentGroups.get(4));
-		courseClasses.add(new CourseClass(_professors.get(4), _courses.get(4), true, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(1));
-		groups.add(_studentGroups.get(2));
-		courseClasses.add(new CourseClass(_professors.get(4), _courses.get(4), true, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-		groups.add(_studentGroups.get(1));
-		groups.add(_studentGroups.get(2));
-		courseClasses.add(new CourseClass(_professors.get(4), _courses.get(4), true, 2, groups.toArray(new StudentsGroup[0])));
-		groups.clear();
-
-
-
+				long lecturer_id = rs.getLong("lecturer_id");
+				long course_id = rs.getLong("course_id");
+				List<StudentsGroup> groups = new ArrayList<>();
+				groups.add(new StudentsGroup(index++, "", 19));
+				courseClasses.add(new CourseClass((int) id,_professors.get((int) lecturer_id), _courses.get((int) course_id), false, _courses.get((int) course_id).Duration, groups.toArray(new StudentsGroup[0])));
+			}
+		}
 		return courseClasses;
 	}
-	public void loadFromDatabase(){
+	public void loadFromDatabase() throws SQLException{
 		_professors.clear();
 		_studentGroups.clear();
 		_courses.clear();
@@ -184,17 +166,14 @@ public class Configuration
 		Room.restartIDs();
 		CourseClass.restartIDs();
 
-
 		_professors = loadProfessors();
 		_studentGroups = loadStudentsGroups();
 		_courses = loadCourses();
 		_rooms = loadRooms();
 		_courseClasses = loadCourseClasses();
+
 		_isEmpty = false;
 	}
-
-
-
 
 	Professor getProfessorById(int id)		// Trả về ID giáo viên, nếu không có thì = null
 	{
@@ -231,7 +210,9 @@ public class Configuration
 
 	public int getNumberOfRooms() { return _rooms.size(); }		// Số lượng phòng
 
+
 	public List<CourseClass> getCourseClasses() { return _courseClasses; }	// Danh sách các lớp
+
 
 	public int getNumberOfCourseClasses() { return _courseClasses.size(); }		// Số lớp
 

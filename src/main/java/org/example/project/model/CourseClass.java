@@ -35,5 +35,8 @@ public class CourseClass {
             inverseJoinColumns = @JoinColumn(name = "student_id"))
     Set<Student> students;
 
+    private String room;
+    private String schedule;
+
 
 }
