@@ -9,23 +9,29 @@ import org.example.project.gaSchedule.model.Room;
 import org.example.project.gaSchedule.model.Schedule;
 import org.example.project.model.*;
 import org.example.project.model.CourseClass;
+import org.example.project.model.Image;
 import org.example.project.service.UserService;
 import org.example.project.service.courseClass.CourseClassService;
 import org.example.project.service.course.CourseService;
 import org.example.project.service.dept.DeptService;
+import org.example.project.service.image.ImageService;
 import org.example.project.service.lecturer.LecturerService;
 import org.example.project.service.student.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
 import java.io.*;
 import java.security.Principal;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -99,7 +105,6 @@ public class AdminController {
     public String course_management (Model model,  @Param("keyword_id") String keyword_id ,@Param("keyword_name") String keyword_name,
                                      @Param("keyword_dept") Long keyword_dept)  {
         List<Course> list = this.courseService.getAll();
-
         if (keyword_id != null){
             list = this.courseService.searchCourseById(keyword_id);
         }
@@ -109,6 +114,10 @@ public class AdminController {
         if (keyword_dept != null && keyword_dept != 0){
             list = this.courseService.searchCourseByDept(keyword_dept);
         }
+
+
+
+
         model.addAttribute("list", list);
 
         List<Department> list1 = this.deptService.getAll();
@@ -182,7 +191,8 @@ public class AdminController {
     private StudentService studentService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private ImageService imageService;
     @GetMapping("/list_student_{id}")
     public String list_student (Model model, @PathVariable("id") Long id,
                                 @Param("keyword_id") Long keyword_id,
@@ -191,9 +201,9 @@ public class AdminController {
         if (keyword_id != null){
             list = this.userService.searchStudentByIdAndDeptId(keyword_id, id);
         }
-        //if (keyword_name != null){
-        //    list = this.userService.searchStudentByName(keyword_name);
-        //}
+        if (keyword_name != null){
+           list = this.userService.searchStudentByName(keyword_name);
+        }
         model.addAttribute("list", list);
 
         User user = new User();
@@ -208,14 +218,18 @@ public class AdminController {
         return "admin_pages/list_student";
     }
 
+
     @PostMapping("/add_student")
     public String save_student(@ModelAttribute("student") User user,
                                @Param("educationLevel") String educationLevel ,
                                @Param("educationProgram") String educationProgram,
                                @Param("className") String className,
-                               HttpServletRequest request) {
+                               @RequestParam("image_path") MultipartFile file,
+                               HttpServletRequest request) throws IOException, SQLException {
 
         user.setRole("student");
+
+
 
         if (this.userService.update(user)) {
             Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
@@ -224,6 +238,15 @@ public class AdminController {
             String email = convertToUsername(user.getFullname()) + "." + user.getId().toString() + "@gmail.com";
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode("2002"));
+
+            if (file != null){
+                byte[] bytes = file.getBytes();
+                Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                Image image = new Image(user.getId(),blob, null);
+                if (this.imageService.create(image)){
+
+                }
+            }
 
 
             if (this.studentService.update(student))
@@ -236,22 +259,47 @@ public class AdminController {
     }
 
     @GetMapping("/edit_student_{id}")
-    public String edit_student(Model model, @PathVariable Long id) {
+    public String edit_student(Model model, @PathVariable Long id) throws SQLException {
         User user = this.userService.findById(id);
         model.addAttribute("user", user);
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
 
+
+
         return "admin_pages/edit_manage/edit_student";
+    }
+
+    // display image
+    @GetMapping("/display")
+    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws IOException, SQLException
+    {
+        User user = this.userService.findById(id);
+        byte [] imageBytes = null;
+        Blob image = user.getImage().getImageData();
+        imageBytes = image.getBytes(1,(int) image.length());
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
     @PostMapping("/edit_student")
     public String update_student(@ModelAttribute("user") User user, @Param("educationLevel") String educationLevel ,
-                                 @Param("educationProgram") String educationProgram, @Param("className") String className) {
+                                 @Param("educationProgram") String educationProgram, @Param("className") String className,
+                                 @Param("image_path") MultipartFile file) throws IOException, SQLException {
 
         Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
+        if (file != null){
+            byte[] bytes = file.getBytes();
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+            Image image = new Image(user.getId(),blob, null);
+            if (this.imageService.create(image)){
+
+            }
+        }
+
         if (this.userService.update(user)) {
+
+
             if (this.studentService.update(student))
                 return "redirect:/list_student_" + user.getDepartment().getId();
         }

@@ -2,6 +2,8 @@ package org.example.project.model;
 
 import jakarta.persistence.*;
 
+import java.sql.Blob;
+
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class  User {
@@ -16,6 +18,17 @@ public class  User {
 	private String phoneNumber;
 	private String yearOfAdmission;
 	private String gender;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private Image image;
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
 
 
 
@@ -50,6 +63,8 @@ public class  User {
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	@PrimaryKeyJoinColumn
 	private Lecturer lecturer;
+
+
 
 	@ManyToOne
 	@JoinColumn(name = "department_id")
