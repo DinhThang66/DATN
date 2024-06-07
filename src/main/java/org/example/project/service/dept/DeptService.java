@@ -13,4 +13,5 @@ public interface DeptService {
     Boolean delete(Long id);
     List<Department> searchDept(String keyword);
     Page<Department> getAll(Integer pageNo);
+    Page<Department> searchDept(String keyword, Integer pageNo);
 }

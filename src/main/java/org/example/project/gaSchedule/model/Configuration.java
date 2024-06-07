@@ -129,9 +129,10 @@ public class Configuration
 
 	private Map<Integer, Room> loadRooms() {
 		Map<Integer, Room> rooms = new TreeMap<>();
-		rooms.put(0, new Room("R4", false, 50));
+		rooms.put(0, new Room("D5-101", false, 50));
 		rooms.put(1, new Room("R6", true, 50));
 		rooms.put(2, new Room("R7", true, 60));
+		rooms.put(3, new Room("D5-102", true, 60));
 
 		return rooms;
 	}

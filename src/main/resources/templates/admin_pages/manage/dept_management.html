@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <div th:replace="fragments/head :: head"></div>
 
 <body class="m-0 font-sans text-base antialiased font-normal dark:bg-slate-900 leading-default bg-gray-50 text-slate-500">
@@ -180,7 +181,27 @@
 
 <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
     <!-- Navbar -->
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+         navbar-main navbar-scroll="false">
+        <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+            <nav>
+                <!-- breadcrumb -->
+                <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
+                    <li class="text-sm leading-normal">
+                        <a class="text-white opacity-50" href="javascript:;">Main</a>
+                    </li>
+                    <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
+                        aria-current="page">
+                        Dữ liệu
+                    </li>
+                </ol>
+                <h6 class="mb-0 font-bold text-white capitalize">Khoa viện</h6>
+            </nav>
+
+            <div th:replace="fragments/navbar :: navbar"></div>
+
+        </div>
+    </nav>
     <!-- end Navbar -->
 
 
@@ -284,21 +305,22 @@
                             <nav aria-label="">
                                 <ul class="flex items-center -space-x-px h-8 text-sm">
                                     <li>
-                                        <a th:if="${currentPage} > 1" th:href="@{'?pageNo=' + ${currentPage - 1}}"
-                                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                        <a th:if="${currentPage} > 1"
+                                           th:href="@{${keyword!=null && keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo=' + ${currentPage - 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             <<
                                         </a>
                                     </li>
-                                    <li th:each="i:${#numbers.sequence(1, totalPage)}"
-                                        th:classappend="${currentPage == i ? 'action' : ''}">
-                                        <a class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
-                                           th:href="@{'?pageNo=' + ${i}}" th:text="${i}">
+                                    <li th:each="i:${#numbers.sequence(1, totalPage)}">
+                                        <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
+                                           th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
+                                           th:href="@{${keyword!=null && keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo=' + ${i}}" th:text="${i}">
                                         </a>
                                     </li>
                                     <li>
                                         <a th:if="${currentPage} < ${totalPage}"
-                                           th:href="@{'?pageNo=' + ${currentPage + 1}}"
-                                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                           th:href="@{${keyword!=null && keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo=' + ${currentPage + 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             >>
                                         </a>
                                     </li>

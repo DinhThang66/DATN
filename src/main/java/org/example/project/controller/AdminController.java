@@ -48,12 +48,12 @@ public class AdminController {
     public String dept_management(Model model, @Param("keyword") String keyword,
                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         Page<Department> list = this.deptService.getAll(pageNo);
-        /*
+
           if (keyword != null){
-            list = this.deptService.searchDept(keyword);
+            list = this.deptService.searchDept(keyword, pageNo);
+            model.addAttribute("keyword", keyword);
         }
 
-         */
 
         model.addAttribute("list", list);
 
@@ -67,9 +67,10 @@ public class AdminController {
     }
 
     @PostMapping("/add_dept")
-    public String save_dept(@ModelAttribute("department") Department department) {
+    public String save_dept(@ModelAttribute("department") Department department, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         if (this.deptService.create(department)) {
-            return "redirect:/dept_management";
+            return "redirect:" + referer;
         }
         return "admin_pages/manage/dept_management";
     }
@@ -91,10 +92,12 @@ public class AdminController {
     }
 
     @GetMapping("/delete_dept_{id}")
-    public String delete_dept(@PathVariable("id") Long id) {
-        if (this.deptService.delete(id))
-            return "redirect:/dept_management";
-        return "redirect:/dept_management";
+    public String delete_dept(@PathVariable("id") Long id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        if (this.deptService.delete(id)) {
+            return "redirect:" + referer;
+        }
+        return "redirect:" + referer;
     }
 
     // Course ===========================
@@ -285,9 +288,10 @@ public class AdminController {
     @PostMapping("/edit_student")
     public String update_student(@ModelAttribute("user") User user, @Param("educationLevel") String educationLevel ,
                                  @Param("educationProgram") String educationProgram, @Param("className") String className,
-                                 @Param("image_path") MultipartFile file) throws IOException, SQLException {
+                                 @Param("imagePath") MultipartFile file) throws IOException, SQLException {
 
         Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
+
         if (file != null){
             byte[] bytes = file.getBytes();
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
@@ -298,8 +302,6 @@ public class AdminController {
         }
 
         if (this.userService.update(user)) {
-
-
             if (this.studentService.update(student))
                 return "redirect:/list_student_" + user.getDepartment().getId();
         }

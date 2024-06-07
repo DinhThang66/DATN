@@ -168,7 +168,27 @@
 
 <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
     <!-- Navbar -->
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+         navbar-main navbar-scroll="false">
+        <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+            <nav>
+                <!-- breadcrumb -->
+                <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
+                    <li class="text-sm leading-normal">
+                        <a class="text-white opacity-50" href="javascript:;">Main</a>
+                    </li>
+                    <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
+                        aria-current="page">
+                        Dữ liệu
+                    </li>
+                </ol>
+                <h6 class="mb-0 font-bold text-white capitalize">Khoa viện</h6>
+            </nav>
+
+            <div th:replace="fragments/navbar :: navbar"></div>
+
+        </div>
+    </nav>
     <!-- end Navbar -->
 
 
@@ -202,7 +222,7 @@
                                 </div>
                                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                                     <div class="">
-                                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required="required"
+                                        <input type="file" id="imagePath" name="imagePath" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required="required"
                                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                                     </div>
                                 </div>

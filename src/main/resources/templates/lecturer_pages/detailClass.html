@@ -100,86 +100,58 @@
                 <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                     <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between">
                         <h6 class="dark:text-white">Danh sách sinh viên</h6>
-                    </div>
-
-
-                    <form class="flex flex-wrap">
-                        <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
-                            <input type="text" placeholder="Nhập mã lớp, mã môn, tên môn" name="keyword_id"
-                                   class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
-                        </div>
-
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <div class="flex flex-row">
-                                <button type="submit"
+                                <button type="submit" id="diemDanhButton"
                                         class="inline-flex items-center px-2 py-2.5 mr-4 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
-                                    <img src="../assets/img/ic/ic_search.svg" class="w-5 h-5 text-white" alt="Icon">
-                                    <span>Tìm kiếm</span>
+                                    <span>Điểm danh</span>
                                 </button>
                             </div>
                         </div>
+                    </div>
 
-                    </form>
+
                     <div class="flex-auto px-0 pt-0 pb-2">
                         <div class="p-0 overflow-x-auto">
-                            <table class="items-center justify-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
+                            <table class="items-center justify-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500"
+                                   id="studentTable">
                                 <thead class="align-bottom">
                                 <tr>
                                     <th class="px-5 py-3 w-10 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         STT
                                     </th>
                                     <th class="px-6 py-3 w-50  font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Mã lớp
-                                    </th>
-                                    <th class="px-6 py-3 w-50  font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Học phần
+                                        Họ và tên
                                     </th>
                                     <th class="px-6 py-3 w-75 pl-2 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal text-slate-400 opacity-70">
-                                        Lịch dạy
+                                        Số lần vắng
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
 
-                                <tr th:each="class : ${list}"
+                                <tr th:each="student : ${list}"
                                     class="dark:text-white dark:opacity-80 whitespace-nowrap rounded-lg px-4 transition-colors hover:bg-blue-200 hover:text-slate-700">
                                     <td class="px-6 py-3 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a th:href="@{/detailClass_{id}(id=${class.id})}">
-                                            <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
-                                                th:text="${#ids.seq ('')}"></h6>
 
-                                        </a>
-                                    </td>
-                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a class="flex px-2 py-1"
-                                           th:href="@{/detailClass_{id}(id=${class.id})}">
-                                            <div class="flex flex-col justify-center">
-                                                <h6 class="mb-0 text-sm leading-normal dark:text-white"
-                                                    th:text="${class.id}"></h6>
-                                            </div>
-                                        </a>
+                                        <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
+                                            th:text="${#ids.seq ('')}"></h6>
+
                                     </td>
 
-
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a class="flex px-2 py-1"
-                                           th:href="@{/detailClass_{id}(id=${class.id})}">
+                                        <div class="flex px-2 py-1">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal dark:text-white"
-                                                    th:text="${class.course.name}"></h6>
+                                                    th:text="${student.user.fullname}"></h6>
                                             </div>
-                                        </a>
+                                        </div>
                                     </td>
 
 
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a th:href="@{/detailClass_{id}(id=${class.id})}">
-                                            <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80">
-                                                <span th:text="'Phòng ' + ${class.room}"></span><br>
-                                                <span th:text="${class.schedule}"></span>
-                                            </h6>
-                                        </a>
+
                                     </td>
 
 
@@ -192,14 +164,71 @@
 
                         </div>
                     </div>
+                    <div class="hidden px-6 py-2 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between"
+                         id="submitContainer">
+                        <h6 class="dark:text-white"></h6>
+                        <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg px-4 pb-2">
+                            <div class="flex flex-row">
+                                <button type="submit"
+                                        class="inline-flex items-center px-2 py-2.5 mr-4 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
+                                    <span>Gửi danh sách</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
+
         </div>
     </div>
     <!-- end cards -->
 </main>
+<script>
+    document.getElementById('diemDanhButton').addEventListener('click', function() {
+        var table = document.getElementById('studentTable');
+        var header = table.querySelector('thead tr');
+        var rows = table.querySelectorAll('tbody tr');
 
+        // Tạo tiêu đề cột mới
+        var newHeader = document.createElement('th');
+        newHeader.classList.add('px-6', 'py-3', 'font-bold', 'text-left', 'uppercase', 'align-middle', 'bg-transparent', 'border-b', 'border-collapse', 'shadow-none', 'dark:border-white/40', 'dark:text-white', 'text-xxs', 'border-b-solid', 'tracking-none', 'whitespace-nowrap', 'text-slate-400', 'opacity-70');
+        var now = new Date();
+        // Định dạng ngày tháng và thời gian
+        var formattedDateTime = now.getFullYear() + '-' +
+            String(now.getMonth() + 1).padStart(2, '0') + '-' +
+            String(now.getDate()).padStart(2, '0') + '\n' +
+            String(now.getHours()).padStart(2, '0') + ':' +
+            String(now.getMinutes()).padStart(2, '0')   ;
+
+        newHeader.innerText = formattedDateTime;
+
+        // Chèn cột mới sau cột "Họ và tên"
+        header.insertBefore(newHeader, header.children[2]);
+
+        // Thêm checkbox vào mỗi hàng sau cột "Họ và tên"
+        rows.forEach(function(row) {
+            var newCell = document.createElement('td');
+            newCell.classList.add('px-6', 'py-3', 'align-middle', 'bg-transparent', 'border-b', 'dark:border-white/40', 'whitespace-nowrap', 'shadow-transparent');
+            var checkBox = document.createElement('input');
+            checkBox.type = 'checkbox';
+            checkBox.checked = true; // Mặc định checkbox là chọn
+            newCell.appendChild(checkBox);
+            row.insertBefore(newCell, row.children[2]);
+        });
+
+        // Disable the button after adding the column
+        this.disabled = true;
+
+        // submitContainer
+        var submitContainer = document.getElementById('submitContainer');
+        if (submitContainer.classList.contains('hidden')) {
+            // Nếu có, remove class 'hidden'
+            submitContainer.classList.remove('hidden');
+        }
+    });
+</script>
 
 
 <div th:replace="fragments/fixed-plugin :: fixed-plugin"></div>
