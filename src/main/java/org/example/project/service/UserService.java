@@ -3,6 +3,7 @@ package org.example.project.service;
 
 import org.example.project.dto.UserDto;
 import org.example.project.model.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,5 +25,7 @@ public interface UserService {
 	List<User> findAllByLecturerInDept(Long id);
 	List<User> searchStudentByIdAndDeptId(Long keyword, Long keyword1);
 	List<User> findAllByLecturer();
+
+	Page<User> getAllByStudentInDept(Long id, Integer pageNo);
 
 }

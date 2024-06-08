@@ -301,6 +301,7 @@
                             </table>
 
                         </div>
+
                         <div class="float-right m-4">
                             <nav aria-label="">
                                 <ul class="flex items-center -space-x-px h-8 text-sm">
@@ -311,7 +312,7 @@
                                             <<
                                         </a>
                                     </li>
-                                    <li th:each="i:${#numbers.sequence(1, totalPage)}">
+                                    <li th:if="${totalPage > 1}" th:each="i:${#numbers.sequence(1, totalPage)}">
                                         <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
                                            th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
                                            th:href="@{${keyword!=null && keyword!=''?'?keyword='+keyword+'&':'?'}+'pageNo=' + ${i}}" th:text="${i}">

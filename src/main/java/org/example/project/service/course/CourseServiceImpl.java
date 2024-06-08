@@ -1,8 +1,13 @@
 package org.example.project.service.course;
 
 import org.example.project.model.Course;
+import org.example.project.model.Department;
 import org.example.project.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,5 +74,27 @@ public class CourseServiceImpl implements CourseService{
     public List<Course> searchCourseByDept(Long keyword) {
         return this.courseRepository.searchCourseByDept(keyword);
     }
+
+    @Override
+    public Page<Course> getAll(Integer pageNo) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+        return this.courseRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo) {
+        List<Course> list = this.searchCourseByName(keywordName);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<Course>(list, pageable, this.searchCourseByName(keywordName).size());
+    }
+
+
+
 
 }

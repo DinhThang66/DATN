@@ -2,10 +2,15 @@ package org.example.project.service;
 
 
 import org.example.project.dto.UserDto;
+import org.example.project.model.Course;
 import org.example.project.model.User;
 import org.example.project.repositories.StudentRepository;
 import org.example.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -103,6 +108,20 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findAllByLecturer() {
 		return this.userRepository.findAllByLecturer();
+	}
+
+	@Override
+	public Page<User> getAllByStudentInDept(Long id, Integer pageNo) {
+		List<User> list = this.findAllByStudentInDept(id);
+
+		Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+		int start = (int) pageable.getOffset();
+		int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+		list = list.subList(start, end);
+
+		return new PageImpl<User>(list, pageable, this.findAllByStudentInDept(id).size());
 	}
 
 }

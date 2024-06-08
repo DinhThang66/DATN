@@ -40,4 +40,11 @@ public class LecturerController {
         model.addAttribute("list", list);
         return "lecturer_pages/detailClass";
     }
+    @GetMapping("/")
+    public String index(Model model) {
+        String x = "dinh van thang";
+        model.addAttribute("userName", x);
+        model.addAttribute("userEmail", "markDavis@gmail.com");
+        return "fragments/navbar";
+    }
 }
