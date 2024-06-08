@@ -47,4 +47,10 @@ public class LecturerController {
         model.addAttribute("userEmail", "markDavis@gmail.com");
         return "fragments/navbar";
     }
+
+    @GetMapping("/admin_page/test")
+    public String index1(Model model) {
+
+        return "admin_pages/index";
+    }
 }

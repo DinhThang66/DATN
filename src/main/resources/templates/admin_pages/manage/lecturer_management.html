@@ -28,7 +28,7 @@
         <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
                 <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 transition-colors  hover:bg-blue-200 hover:text-slate-700"
-                   href="./admin_page">
+                   href="/admin_page">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="text-sm leading-normal text-blue-500 ni ni-shop"></i>
                     </div>
@@ -58,14 +58,14 @@
                     <div x-show="open" class="pl-7 mt-2">
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/dept_management">
+                               href="/admin_page/dept_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> A </span>
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý khoa</span>
                             </a>
                         </div>
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/student_management">
+                               href="/admin_page/student_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> L </span>
 
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý sinh viên</span>
@@ -75,7 +75,7 @@
                         <div class="w-full">
 
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap rounded-lg bg-transparent pr-4 font-semibold text-slate-800 shadow-none transition-colors  dark:text-white dark:opacity-100 "
-                               href="/lecturer_management">
+                               href="/admin_page/lecturer_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -85,7 +85,7 @@
                         <div class="w-full">
 
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/course_management">
+                               href="/admin_page/course_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -223,7 +223,7 @@
                             <div class="flex flex-col w-full max-w-full px-3 py-3 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4"
                                  th:each="entry  : ${list}">
                                 <a class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border"
-                                   th:href="@{/list_lecturer_{id}(id=${entry.key.id})}">
+                                   th:href="@{/admin_page/lecturer_management/list_lecturer_{id}(id=${entry.key.id})}">
                                     <div class="p-4 mx-6 mb-0 text-center border-b-0 border-b-solid rounded-t-2xl border-b-transparent">
                                         <div class="w-16 h-16 text-center bg-center shadow-sm icon bg-gradient-to-tl from-blue-500 to-violet-500 rounded-xl">
                                             <i class="relative text-xl leading-none text-white opacity-100 fas fa-landmark top-31/100"></i>
