@@ -16,7 +16,9 @@
 */
 var page = window.location.pathname.split("/").pop().split(".")[0];
 var aux = window.location.pathname.split("/");
-var to_build = (aux.includes('pages') || aux.includes('docs') ?'../':'./');
+//var to_build = (aux.includes('pages') || aux.includes('docs') ?'../':'./');
+var to_build = "http://localhost:8080/";
+
 var root = window.location.pathname.split("/")
 if (!aux.includes("pages")) {
   page = "dashboard";
@@ -24,6 +26,7 @@ if (!aux.includes("pages")) {
 
 loadStylesheet(to_build + "assets/css/perfect-scrollbar.css");
 loadJS(to_build + "assets/js/perfect-scrollbar.js", true);
+loadJS(to_build + "assets/js/alpine.js", true);
 
 if (document.querySelector("[slider]")) {
   loadJS(to_build + "assets/js/carousel.js", true);
@@ -87,3 +90,4 @@ function loadStylesheet(FILE_URL) {
 
   document.head.appendChild(dynamicStylesheet);
 }
+

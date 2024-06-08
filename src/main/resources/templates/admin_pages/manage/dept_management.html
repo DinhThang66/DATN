@@ -58,14 +58,14 @@
                     <div x-show="open" class="pl-7 mt-2">
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap rounded-lg bg-transparent pr-4 font-semibold text-slate-800 shadow-none transition-colors  dark:text-white dark:opacity-100 "
-                               href="/dept_management">
+                               href="/admin_page/dept_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> A </span>
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý khoa</span>
                             </a>
                         </div>
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/student_management">
+                               href="/admin_page/student_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> L </span>
 
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý sinh viên</span>
@@ -75,7 +75,7 @@
                         <div class="w-full">
 
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/lecturer_management">
+                               href="/admin_page/lecturer_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -85,7 +85,7 @@
                         <div class="w-full">
 
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/course_management">
+                               href="/admin_page/course_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -283,7 +283,7 @@
 
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
-                                            <a type="button" th:href="@{/edit_dept_{id}(id=${deparment.id})}"
+                                            <a type="button" th:href="@{/admin_page/dept_management/edit_dept={id}(id=${deparment.id})}"
                                                class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
                                             >
                                                 <img src="../assets/img/ic/ic_edit.svg" class="w-4 h-4" alt="Icon">

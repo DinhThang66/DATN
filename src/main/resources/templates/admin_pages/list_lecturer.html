@@ -11,10 +11,10 @@
         <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden"></i>
         <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700"
            href="/admin_page">
-            <img src="../assets/img/logo-ct-dark.png"
+            <img th:src="@{/assets/img/logo-ct-dark.png}"
                  class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8"
                  alt="main_logo"/>
-            <img src="../assets/img/logo-ct.png"
+            <img th:src="@{/assets/img/logo-ct.png}"
                  class="hidden h-full max-w-full transition-all duration-200 dark:inline ease-nav-brand max-h-8"
                  alt="main_logo"/>
             <span class="ml-1 font-semibold transition-all duration-200 ease-nav-brand">Hệ thống quản lý đào tạo</span>
@@ -57,14 +57,14 @@
                     <div x-show="open" class="pl-7 mt-2">
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/dept_management">
+                               href="/admin_page/dept_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> A </span>
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý khoa</span>
                             </a>
                         </div>
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/student_management">
+                               href="/admin_page/student_management">
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> L </span>
 
                                 <span class="transition-all duration-100 pointer-events-none ease">Quản lý sinh viên</span>
@@ -73,7 +73,7 @@
 
                         <div class="w-full">
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap rounded-lg bg-transparent pr-4 font-semibold text-slate-800 shadow-none transition-colors  dark:text-white dark:opacity-100 "
-                               href="/lecturer_management">
+                               href="/admin_page/lecturer_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -83,7 +83,7 @@
                         <div class="w-full">
 
                             <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
-                               href="/course_management">
+                               href="/admin_page/course_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
 
@@ -93,7 +93,6 @@
                     </div>
                 </div>
             </li>
-            <script src="../assets/js/alpine.js" async></script>
 
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
@@ -210,7 +209,7 @@
                         <button type="button"
                                 class="inline-flex items-center px-2 py-3 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md"
                                 onclick="showDialog_add()">
-                            <img src="../assets/img/ic/ic_add.svg" class="w-5 h-5 mr-1 text-white" alt="Icon">
+                            <img th:src="@{/assets/img/ic/ic_add.svg}" class="w-5 h-5 mr-1 text-white" alt="Icon">
                             <span>Thêm mới</span>
                         </button>
                     </div>
@@ -230,12 +229,12 @@
                             <div class="flex flex-row">
                                 <button type="button"
                                         class="inline-flex items-center px-2 py-2.5 mr-4 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
-                                    <img src="../assets/img/ic/ic_search.svg" class="w-5 h-5 text-white" alt="Icon">
+                                    <img th:src="@{/assets/img/ic/ic_search.svg}" class="w-5 h-5 text-white" alt="Icon">
                                     <span>Tìm kiếm</span>
                                 </button>
                                 <button type="button"
                                         class="inline-flex items-center px-2 py-2.5 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-600 to-orange-600 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
-                                    <img src="../assets/img/ic/ic_search.svg" class="w-5 h-5 text-white" alt="Icon">
+                                    <img th:src="@{/assets/img/ic/ic_search.svg}" class="w-5 h-5 text-white" alt="Icon">
                                     <span>Reset</span>
                                 </button>
                             </div>
@@ -299,14 +298,14 @@
                                     </td>
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
-                                            <a type="button" th:href="@{/edit_lecturer_{id}(id=${user.id})}"
+                                            <a type="button" th:href="@{/admin_page/lecturer_management/edit_lecturerId={id}(id=${user.id})}"
                                                class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
-                                                <img src="../assets/img/ic/ic_edit.svg" class="w-4 h-4" alt="Icon">
+                                                <img th:src="@{/assets/img/ic/ic_edit.svg}" class="w-4 h-4" alt="Icon">
                                             </a>
                                             <a type="button" th:href="@{/delete_lecturer_{id}(id=${user.id})}"
                                                class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
                                                onclick="return confirm('Bạn có chắc chắn xóa giảng viên này không?')">
-                                                <img src="../assets/img/ic/ic_delete.svg" class="w-4 h-4" alt="Icon">
+                                                <img th:src="@{/assets/img/ic/ic_delete.svg}" class="w-4 h-4" alt="Icon">
                                             </a>
                                         </div>
                                     </td>
@@ -359,7 +358,7 @@
             <div class="">
                 <div class="mx-6 mt-6 w-75 h-75 border-1 rounded-1.8 border-gray-300">
                     <img class="w-50 h-75 rounded"
-                         src="../assets/img/marie.jpg"
+                         th:src="@{/assets/img/marie.jpg}"
                          alt="">
                 </div>
 
