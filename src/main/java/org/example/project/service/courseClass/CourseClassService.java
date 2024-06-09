@@ -2,6 +2,7 @@ package org.example.project.service.courseClass;
 
 import org.example.project.model.CourseClass;
 import org.example.project.model.Student;
+import org.springframework.data.domain.Page;
 
 
 import java.util.List;
@@ -13,6 +14,6 @@ public interface CourseClassService {
     Boolean delete(Long id);
     List<Student> getAllStudents();
     List<Student> getStudentsByClassId(Long ClassId);
-
+    Page<CourseClass> getAll(Integer pageNo);
 
 }

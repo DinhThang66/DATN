@@ -27,5 +27,7 @@ public interface UserService {
 	List<User> findAllByLecturer();
 
 	Page<User> getAllByStudentInDept(Long id, Integer pageNo);
+	Page<User> getAllByLecturerInDept(Long id, Integer pageNo);
+
 
 }

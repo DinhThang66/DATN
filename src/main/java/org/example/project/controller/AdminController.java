@@ -41,11 +41,10 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    // Department ===========================
+    // Department ==================================
 
     @Autowired
     private DeptService deptService;
-
 
     @GetMapping("/admin_page/dept_management")
     public String dept_management(Model model, @Param("keyword") String keyword,
@@ -112,7 +111,7 @@ public class AdminController {
         return "redirect:" + referer;
     }
 
-    // Course ===========================
+    // Course ==================================
     @Autowired
     private CourseService courseService;
 
@@ -186,7 +185,7 @@ public class AdminController {
         return "redirect:/course_management";
     }
 
-    // Student ===========================
+    // Student ===================================
 
     @GetMapping("/admin_page/student_management")
     public String student_management (Model model, Principal principal) {
@@ -205,7 +204,7 @@ public class AdminController {
         return "admin_pages/manage/student_management";
     }
 
-    // List Student ===========================
+    // List Student ==============================
 
     @Autowired
     private UserService userService;
@@ -352,7 +351,7 @@ public class AdminController {
     }
 
 
-    // Lecturer ===========================
+    // Lecturer ==================================
     @GetMapping("/admin_page/lecturer_management")
     public String lecturer_management (Model model, Principal principal) {
         List<Department> list = this.deptService.getAll();
@@ -370,16 +369,20 @@ public class AdminController {
         return "admin_pages/manage/lecturer_management";
     }
 
-    // List Student ===========================
+    // List Student ==============================
 
     @Autowired
     private LecturerService lecturerService;
 
     @GetMapping("/admin_page/lecturer_management/list_lecturer_{id}")
-    public String list_lecturer (Model model, @PathVariable("id") Long id) {
+    public String list_lecturer (Model model, @PathVariable("id") Long id,
+                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
 
-        List<User> list = this.userService.findAllByLecturerInDept(id);
+        Page<User> list = this.userService.getAllByLecturerInDept(id, pageNo);
+        //List<User> list = this.userService.findAllByLecturerInDept(id);
         model.addAttribute("list", list);
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
 
         User user = new User();
         model.addAttribute("user", user);
@@ -454,20 +457,25 @@ public class AdminController {
         User user = this.userService.findById(id);
         String referer = request.getHeader("Referer");
         if (this.userService.delete(id))
-            return "redirect:/list_lecturer_" + user.getDepartment().getId();
+            return "redirect:" + (referer != null ? referer : "/list_lecturer_" + user.getDepartment().getId()) ;
         return "admin_pages/list_lecturer";
     }
 
 
-    // Class ===========================
+    // Class =====================================
 
     @Autowired
     private CourseClassService courseClassService;
 
-    @GetMapping("class_management")
-    public String class_management (Model model) {
-        List<CourseClass> list = this.courseClassService.getAll();
+    @GetMapping("/admin_page/class_management")
+    public String class_management (Model model,
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+        //List<CourseClass> list = this.courseClassService.getAll();
+        Page<CourseClass> list = this.courseClassService.getAll(pageNo);
+
         model.addAttribute("list", list);
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
@@ -485,15 +493,15 @@ public class AdminController {
         return "admin_pages/manage/class_management";
     }
     @PostMapping("/add_class")
-    public String save_class(@ModelAttribute("class") CourseClass _Course_class) {
+    public String save_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:/class_management";
-        }
+            return "redirect:" + referer;        }
         return "redirect:/class_management";
     }
 
-    @GetMapping("/edit_class_{id}")
-    public String edit_class(Model model, @PathVariable Long id) {
+    @GetMapping("/admin_page/class_management/edit_classId={id}")
+    public String edit_class(Model model, @PathVariable Long id, HttpServletRequest request) {
         CourseClass _Course_class = this.courseClassService.findById(id);
         model.addAttribute("class", _Course_class);
 
@@ -512,8 +520,9 @@ public class AdminController {
         }
         model.addAttribute("numberOfStudents", index);
 
-
-
+        // Lưu URL của trang trước đó vào session
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("previousPage_clazz", referer);
 
         return "admin_pages/edit_manage/edit_class";
     }
@@ -522,19 +531,22 @@ public class AdminController {
 
 
     @PostMapping("/edit_class")
-    public String update_class(@ModelAttribute("class") CourseClass _Course_class) {
+    public String update_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String previousPage = (String) session.getAttribute("previousPage_clazz");
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:/class_management";
+            return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/class_management") ;
 
         }
         return "admin_pages/manage/class_management";
     }
 
     @GetMapping("/delete_class_{id}")
-    public String delete_class(@PathVariable("id") Long id) {
+    public String delete_class(@PathVariable("id") Long id, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
         CourseClass _Course_class = this.courseClassService.findById(id);
         if (this.courseClassService.delete(id))
-            return "redirect:/class_management";
+            return "redirect:" + referer;
         return "admin_pages/manage/class_management";
     }
 

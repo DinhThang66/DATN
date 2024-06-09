@@ -104,7 +104,7 @@
 
             <li class="mt-0.5 w-full">
                 <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-200 hover:text-slate-700"
-                   href="/class_management">
+                   href="/admin_page/class_management">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
                     </div>
@@ -353,7 +353,7 @@
                                     <td class="align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
 
-                                            <a type="button" th:href="@{/edit_class_{id}(id=${class.id})}"
+                                            <a type="button" th:href="@{/admin_page/class_management/edit_classId={id}(id=${class.id})}"
                                                class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
                                                 <img src="../assets/img/ic/ic_edit.svg" class="w-4 h-4" alt="Icon">
                                             </a>
@@ -368,8 +368,36 @@
 
                                 </tbody>
                             </table>
-
                         </div>
+
+                        <div class="float-right m-4">
+                            <nav aria-label="">
+                                <ul class="flex items-center -space-x-px h-8 text-sm">
+                                    <li>
+                                        <a th:if="${currentPage} > 1"
+                                           th:href="@{'?pageNo=' + ${currentPage - 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                            <<
+                                        </a>
+                                    </li>
+                                    <li th:if="${totalPage > 1}" th:each="i:${#numbers.sequence(1, totalPage)}">
+                                        <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
+                                           th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
+                                           th:href="@{'?pageNo=' + ${i}}" th:text="${i}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:if="${currentPage} < ${totalPage}"
+                                           th:href="@{'?pageNo=' + ${currentPage + 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                            >>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+
                     </div>
 
                 </div>
