@@ -41,12 +41,13 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    // Department ==================================
+    // Department ===========================
 
     @Autowired
     private DeptService deptService;
 
-    @GetMapping("/admin_page/dept_management")
+
+    @GetMapping("/dept_management")
     public String dept_management(Model model, @Param("keyword") String keyword,
                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         Page<Department> list = this.deptService.getAll(pageNo);
@@ -77,7 +78,7 @@ public class AdminController {
         return "admin_pages/manage/dept_management";
     }
 
-    @GetMapping("/admin_page/dept_management/edit_dept={id}")
+    @GetMapping("/edit_dept_{id}")
     public String edit_dept(Model model, @PathVariable Long id, HttpServletRequest request) {
         Department department = this.deptService.findById(id);
         model.addAttribute("e_department", department);
@@ -111,11 +112,11 @@ public class AdminController {
         return "redirect:" + referer;
     }
 
-    // Course ==================================
+    // Course ===========================
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/admin_page/course_management")
+    @GetMapping("course_management")
     public String course_management (Model model,  @Param("keyword_id") String keyword_id ,@Param("keyword_name") String keyword_name,
                                      @Param("keyword_dept") Long keyword_dept,
                                      @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo)  {
@@ -152,7 +153,7 @@ public class AdminController {
         return "admin_pages/manage/course_management";
     }
 
-    @GetMapping("/admin_page/edit_course_{id}")
+    @GetMapping("/edit_course_{id}")
     public String edit_course(Model model, @PathVariable Long id, HttpServletRequest request) {
         Course course = this.courseService.findById(id);
         model.addAttribute("course", course);
@@ -185,9 +186,9 @@ public class AdminController {
         return "redirect:/course_management";
     }
 
-    // Student ===================================
+    // Student ===========================
 
-    @GetMapping("/admin_page/student_management")
+    @GetMapping("/student_management")
     public String student_management (Model model, Principal principal) {
         List<Department> list = this.deptService.getAll();
         List<Map.Entry<Department, Integer>> mergedList = new ArrayList<>();
@@ -204,7 +205,7 @@ public class AdminController {
         return "admin_pages/manage/student_management";
     }
 
-    // List Student ==============================
+    // List Student ===========================
 
     @Autowired
     private UserService userService;
@@ -214,7 +215,7 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ImageService imageService;
-    @GetMapping("/admin_page/student_management/list_student_{id}")
+    @GetMapping("/list_student_{id}")
     public String list_student (Model model, @PathVariable("id") Long id,
                                 @Param("keyword_id") Long keyword_id,
                                 @Param("keyword_name") String keyword_name,
@@ -290,7 +291,7 @@ public class AdminController {
         return "admin_pages/list_student";
     }
 
-    @GetMapping("/admin_page/student_management/edit_studentId={id}")
+    @GetMapping("/edit_student_{id}")
     public String edit_student(Model model, @PathVariable Long id, HttpServletRequest request) throws SQLException {
         User user = this.userService.findById(id);
         model.addAttribute("user", user);
@@ -351,8 +352,8 @@ public class AdminController {
     }
 
 
-    // Lecturer ==================================
-    @GetMapping("/admin_page/lecturer_management")
+    // Lecturer ===========================
+    @GetMapping("/lecturer_management")
     public String lecturer_management (Model model, Principal principal) {
         List<Department> list = this.deptService.getAll();
         List<Map.Entry<Department, Integer>> mergedList = new ArrayList<>();
@@ -369,20 +370,16 @@ public class AdminController {
         return "admin_pages/manage/lecturer_management";
     }
 
-    // List Student ==============================
+    // List Student ===========================
 
     @Autowired
     private LecturerService lecturerService;
 
-    @GetMapping("/admin_page/lecturer_management/list_lecturer_{id}")
-    public String list_lecturer (Model model, @PathVariable("id") Long id,
-                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+    @GetMapping("/list_lecturer_{id}")
+    public String list_lecturer (Model model, @PathVariable("id") Long id) {
 
-        Page<User> list = this.userService.getAllByLecturerInDept(id, pageNo);
-        //List<User> list = this.userService.findAllByLecturerInDept(id);
+        List<User> list = this.userService.findAllByLecturerInDept(id);
         model.addAttribute("list", list);
-        model.addAttribute("totalPage", list.getTotalPages());
-        model.addAttribute("currentPage", pageNo);
 
         User user = new User();
         model.addAttribute("user", user);
@@ -422,17 +419,13 @@ public class AdminController {
         return "admin_pages/list_student";
     }
 
-    @GetMapping("/admin_page/lecturer_management/edit_lecturerId={id}")
-    public String edit_lecturer(Model model, @PathVariable Long id, HttpServletRequest request) {
+    @GetMapping("/edit_lecturer_{id}")
+    public String edit_lecturer(Model model, @PathVariable Long id) {
         User user = this.userService.findById(id);
         model.addAttribute("user", user);
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
-
-        // Lưu URL của trang trước đó vào session
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("previousPage_lecturer", referer);
 
         return "admin_pages/edit_manage/edit_lecturer";
     }
@@ -441,13 +434,12 @@ public class AdminController {
     public String update_lecturer(@ModelAttribute("user") User user,
                                   @Param("educationLevel") String educationLevel ,
                                   @Param("position") String position,
-                                  @Param("salary") Integer salary,  HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String previousPage = (String) session.getAttribute("previousPage_lecturer");
+                                  @Param("salary") Integer salary) {
+
         Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position , salary, null);
         if (this.userService.update(user)) {
             if (this.lecturerService.update(lecturer))
-                return "redirect:" + (previousPage != null ? previousPage : "list_lecturer_" + user.getDepartment().getId()) ;
+                return "redirect:/list_lecturer_" + user.getDepartment().getId();
         }
         return "admin_pages/list_lecturer";
     }
@@ -457,25 +449,20 @@ public class AdminController {
         User user = this.userService.findById(id);
         String referer = request.getHeader("Referer");
         if (this.userService.delete(id))
-            return "redirect:" + (referer != null ? referer : "/list_lecturer_" + user.getDepartment().getId()) ;
+            return "redirect:/list_lecturer_" + user.getDepartment().getId();
         return "admin_pages/list_lecturer";
     }
 
 
-    // Class =====================================
+    // Class ===========================
 
     @Autowired
     private CourseClassService courseClassService;
 
-    @GetMapping("/admin_page/class_management")
-    public String class_management (Model model,
-                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
-        //List<CourseClass> list = this.courseClassService.getAll();
-        Page<CourseClass> list = this.courseClassService.getAll(pageNo);
-
+    @GetMapping("class_management")
+    public String class_management (Model model) {
+        List<CourseClass> list = this.courseClassService.getAll();
         model.addAttribute("list", list);
-        model.addAttribute("totalPage", list.getTotalPages());
-        model.addAttribute("currentPage", pageNo);
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
@@ -493,15 +480,15 @@ public class AdminController {
         return "admin_pages/manage/class_management";
     }
     @PostMapping("/add_class")
-    public String save_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
+    public String save_class(@ModelAttribute("class") CourseClass _Course_class) {
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:" + referer;        }
+            return "redirect:/class_management";
+        }
         return "redirect:/class_management";
     }
 
-    @GetMapping("/admin_page/class_management/edit_classId={id}")
-    public String edit_class(Model model, @PathVariable Long id, HttpServletRequest request) {
+    @GetMapping("/edit_class_{id}")
+    public String edit_class(Model model, @PathVariable Long id) {
         CourseClass _Course_class = this.courseClassService.findById(id);
         model.addAttribute("class", _Course_class);
 
@@ -520,9 +507,8 @@ public class AdminController {
         }
         model.addAttribute("numberOfStudents", index);
 
-        // Lưu URL của trang trước đó vào session
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("previousPage_clazz", referer);
+
+
 
         return "admin_pages/edit_manage/edit_class";
     }
@@ -531,22 +517,19 @@ public class AdminController {
 
 
     @PostMapping("/edit_class")
-    public String update_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String previousPage = (String) session.getAttribute("previousPage_clazz");
+    public String update_class(@ModelAttribute("class") CourseClass _Course_class) {
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/class_management") ;
+            return "redirect:/class_management";
 
         }
         return "admin_pages/manage/class_management";
     }
 
     @GetMapping("/delete_class_{id}")
-    public String delete_class(@PathVariable("id") Long id, HttpServletRequest request) {
-        String referer = request.getHeader("Referer");
+    public String delete_class(@PathVariable("id") Long id) {
         CourseClass _Course_class = this.courseClassService.findById(id);
         if (this.courseClassService.delete(id))
-            return "redirect:" + referer;
+            return "redirect:/class_management";
         return "admin_pages/manage/class_management";
     }
 
