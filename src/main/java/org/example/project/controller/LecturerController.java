@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -51,6 +53,12 @@ public class LecturerController {
     @GetMapping("/admin_page/test")
     public String index1(Model model) {
 
-        return "admin_pages/index";
+        return "admin_pages/index1";
+    }
+
+    @GetMapping("/admin_page/had")
+    public String index2(Model model) {
+
+        return "admin_pages/test";
     }
 }

@@ -321,7 +321,7 @@ public class AdminController {
     @PostMapping("/edit_student")
     public String update_student(@ModelAttribute("user") User user, @Param("educationLevel") String educationLevel ,
                                  @Param("educationProgram") String educationProgram, @Param("className") String className,
-                                 @Param("imagePath") MultipartFile file,  HttpServletRequest request) throws IOException, SQLException {
+                                 @RequestParam("imagePath") MultipartFile file,  HttpServletRequest request) throws IOException, SQLException {
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_student");
         Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
@@ -404,10 +404,10 @@ public class AdminController {
                                 @Param("salary") Integer salary,
                                 HttpServletRequest request) {
         user.setRole("lecturer");
+        String referer = request.getHeader("Referer");
 
         if (this.userService.update(user)) {
             Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position,salary, null);
-            String referer = request.getHeader("Referer");
 
             String email = convertToUsername(user.getFullname()) + "." + user.getId().toString() + "@gmail.com";
             user.setEmail(email);
