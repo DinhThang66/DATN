@@ -262,8 +262,6 @@ public class AdminController {
 
         user.setRole("student");
 
-
-
         if (this.userService.update(user)) {
             Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
             String referer = request.getHeader("Referer");
@@ -394,6 +392,9 @@ public class AdminController {
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
 
+        Department department = this.deptService.findById(id);
+        model.addAttribute("nameDept", department.getName());
+
         return "admin_pages/list_lecturer";
     }
 
@@ -402,16 +403,25 @@ public class AdminController {
                                 @Param("educationLevel") String educationLevel ,
                                 @Param("position") String position,
                                 @Param("salary") Integer salary,
-                                HttpServletRequest request) {
+                                @RequestParam("image_path") MultipartFile file,
+                                HttpServletRequest request) throws SQLException, IOException {
         user.setRole("lecturer");
         String referer = request.getHeader("Referer");
 
         if (this.userService.update(user)) {
             Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position,salary, null);
-
             String email = convertToUsername(user.getFullname()) + "." + user.getId().toString() + "@gmail.com";
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode("2002"));
+
+            if (file != null){
+                byte[] bytes = file.getBytes();
+                Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+                Image image = new Image(user.getId(),blob, null);
+                if (this.imageService.create(image)){
+
+                }
+            }
 
             if (this.lecturerService.update(lecturer))
                 if (referer != null) {
@@ -443,11 +453,22 @@ public class AdminController {
     public String update_lecturer(@ModelAttribute("user") User user,
                                   @Param("educationLevel") String educationLevel ,
                                   @Param("position") String position,
-                                  @Param("salary") Integer salary, HttpServletRequest request) {
+                                  @Param("salary") Integer salary,
+                                  @RequestParam("imagePath") MultipartFile file,HttpServletRequest request) throws IOException, SQLException {
 
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_lecturer");
         Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position , salary, null);
+
+        if (file != null){
+            byte[] bytes = file.getBytes();
+            Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
+            Image image = new Image(user.getId(),blob, null);
+            if (this.imageService.create(image)){
+
+            }
+        }
+
         if (this.userService.update(user)) {
             if (this.lecturerService.update(lecturer))
                 return "redirect:" + (previousPage != null ? previousPage : "/list_lecturer_" + user.getDepartment().getId()) ;
@@ -530,9 +551,6 @@ public class AdminController {
 
         return "admin_pages/edit_manage/edit_class";
     }
-
-
-
 
     @PostMapping("/edit_class")
     public String update_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {

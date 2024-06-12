@@ -210,7 +210,7 @@
                         <h6 class="dark:text-white">Chỉnh sửa giảng viên</h6>
                     </div>
 
-                    <form class="flex-auto px-0 pt-0 pb-2"
+                    <form class="flex-auto px-0 pt-0 pb-2" enctype="multipart/form-data"
                           role="form" method="post" th:object="${user}"
                           th:action="@{/edit_lecturer}">
 
@@ -225,10 +225,14 @@
 
                         <div class="flex flex-wrap">
                             <div class="">
-                                <div class="mx-6 mt-6 w-75 h-75 border-1 rounded-1.8 border-gray-300">
-                                    <img class="w-50 h-75 rounded"
-                                         th:src="@{/assets/img/marie.jpg}"
-                                         alt="">
+                                <div class="mx-6 mt-6 w-75 h-60 border-1 rounded-1.8 border-gray-300">
+                                    <img class="w-50 h-60 rounded"  th:src="@{${'/display?id=' + id}}" alt="" id="previewImage">
+                                </div>
+                                <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
+                                    <div class="">
+                                        <input type="file" id="imagePath" name="imagePath" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onchange="displayImage()"
+                                               class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
+                                    </div>
                                 </div>
 
                                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
@@ -446,6 +450,28 @@
 
 
 <!-- -->
+<script>
+    function displayImage(){
+        const input = document.getElementById("imagePath");
+        const file = input.files[0];
+        if (file){
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const imageDataUrl = event.target.result;
+                updateImageSrc(imageDataUrl)
+            };
+            reader.onerror = function (error){
+                console.error("Error", error);
+            };
+            reader.readAsDataURL(file)
+        }
+    }
+    function updateImageSrc(imageDataUrl) {
+        const img = document.getElementById("previewImage");
+        img.src = imageDataUrl;
+        img.style.display = "block";
+    }
+</script>
 
 
 <div th:replace="fragments/fixed-plugin :: fixed-plugin"></div>
