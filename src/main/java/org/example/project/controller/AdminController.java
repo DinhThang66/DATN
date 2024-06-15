@@ -52,7 +52,7 @@ public class AdminController {
                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         Page<Department> list = this.deptService.getAll(pageNo);
 
-          if (keyword != null){
+        if (keyword != null) {
             list = this.deptService.searchDept(keyword, pageNo);
             model.addAttribute("keyword", keyword);
         }
@@ -60,7 +60,7 @@ public class AdminController {
 
         model.addAttribute("list", list);
 
-        Department department = new Department();   
+        Department department = new Department();
         model.addAttribute("department", department);
 
 
@@ -97,7 +97,7 @@ public class AdminController {
 
         if (this.deptService.update(department)) {
             //session.removeAttribute("previousPage");
-            return "redirect:" + (previousPage != null ? previousPage : "/dept_management") ;
+            return "redirect:" + (previousPage != null ? previousPage : "/dept_management");
             //return "redirect:/dept_management";
         }
         return "admin_pages/manage/dept_management";
@@ -117,14 +117,13 @@ public class AdminController {
     private CourseService courseService;
 
     @GetMapping("admin_page/course_management")
-    public String course_management (Model model,  @Param("keyword_id") String keyword_id ,@Param("keyword_name") String keyword_name,
-                                     @Param("keyword_dept") Long keyword_dept,
-                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo)  {
+    public String course_management(Model model, @Param("keyword_id") String keyword_id, @Param("keyword_name") String keyword_name,
+                                    @Param("keyword_dept") Long keyword_dept,
+                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         Page<Course> list = this.courseService.getAll(pageNo);
 
 
-
-        if (keyword_name != null){
+        if (keyword_name != null) {
             list = this.courseService.searchDept(keyword_dept, keyword_id, keyword_name, pageNo);
             model.addAttribute("keyword_name", keyword_name);
         }
@@ -136,7 +135,6 @@ public class AdminController {
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
-
 
 
         Course course = new Course();
@@ -169,11 +167,11 @@ public class AdminController {
     }
 
     @PostMapping("/edit_course")
-    public String update_course( @ModelAttribute("course") Course course, HttpServletRequest request) {
+    public String update_course(@ModelAttribute("course") Course course, HttpServletRequest request) {
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_course");
         if (this.courseService.update(course)) {
-            return "redirect:" + (previousPage != null ? previousPage : "/course_management") ;
+            return "redirect:" + (previousPage != null ? previousPage : "/course_management");
         }
         return "admin_pages/manage/course_management";
     }
@@ -189,18 +187,18 @@ public class AdminController {
     // Student ===========================
 
     @GetMapping("admin_page/student_management")
-    public String student_management (Model model, Principal principal) {
+    public String student_management(Model model, Principal principal) {
         List<Department> list = this.deptService.getAll();
         List<Map.Entry<Department, Integer>> mergedList = new ArrayList<>();
 
         // Ghép thông tin từ list1 và số lượng bằng cách sử dụng Map.Entry
-        for (Department department : list ) {
+        for (Department department : list) {
             int id = this.userService.numberOfStudentsInDept(department.getId());
             Map.Entry<Department, Integer> entry = new AbstractMap.SimpleEntry<>(department, id);
             mergedList.add(entry);
         }
 
-        model.addAttribute("list",  mergedList);
+        model.addAttribute("list", mergedList);
 
         return "admin_pages/manage/student_management";
     }
@@ -215,22 +213,19 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ImageService imageService;
+
     @GetMapping("/admin_page/student_management/list_student_{id}")
-    public String list_student (Model model, @PathVariable("id") Long id,
-                                @Param("keyword_id") Long keyword_id,
-                                @Param("keyword_name") String keyword_name,
-                                @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+    public String list_student(Model model, @PathVariable("id") Long id,
+                               @Param("keyword_id") Long keyword_id,
+                               @Param("keyword_name") String keyword_name,
+                               @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         Page<User> list = this.userService.getAllByStudentInDept(id, pageNo);
 
-        /*
-        if (keyword_id != null){
-            list = this.userService.searchStudentByIdAndDeptId(keyword_id, id);
-        }
-        if (keyword_name != null){
-           list = this.userService.searchStudentByName(keyword_name);
+
+        if (keyword_id != null || (keyword_name != null && keyword_name.isEmpty())) {
+            list = this.userService.getStudent(id, keyword_id, keyword_name, pageNo);
         }
 
-         */
 
         model.addAttribute("list", list);
         model.addAttribute("totalPage", list.getTotalPages());
@@ -254,7 +249,7 @@ public class AdminController {
 
     @PostMapping("/add_student")
     public String save_student(@ModelAttribute("student") User user,
-                               @Param("educationLevel") String educationLevel ,
+                               @Param("educationLevel") String educationLevel,
                                @Param("educationProgram") String educationProgram,
                                @Param("className") String className,
                                @RequestParam("image_path") MultipartFile file,
@@ -270,11 +265,11 @@ public class AdminController {
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode("2002"));
 
-            if (file != null){
+            if (file != null) {
                 byte[] bytes = file.getBytes();
                 Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                Image image = new Image(user.getId(),blob, null);
-                if (this.imageService.create(image)){
+                Image image = new Image(user.getId(), blob, null);
+                if (this.imageService.create(image)) {
 
                 }
             }
@@ -307,35 +302,34 @@ public class AdminController {
 
     // display image
     @GetMapping("/display")
-    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws IOException, SQLException
-    {
+    public ResponseEntity<byte[]> displayImage(@RequestParam("id") long id) throws IOException, SQLException {
         User user = this.userService.findById(id);
-        byte [] imageBytes = null;
+        byte[] imageBytes = null;
         Blob image = user.getImage().getImageData();
-        imageBytes = image.getBytes(1,(int) image.length());
+        imageBytes = image.getBytes(1, (int) image.length());
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBytes);
     }
 
     @PostMapping("/edit_student")
-    public String update_student(@ModelAttribute("user") User user, @Param("educationLevel") String educationLevel ,
+    public String update_student(@ModelAttribute("user") User user, @Param("educationLevel") String educationLevel,
                                  @Param("educationProgram") String educationProgram, @Param("className") String className,
-                                 @RequestParam("imagePath") MultipartFile file,  HttpServletRequest request) throws IOException, SQLException {
+                                 @RequestParam("imagePath") MultipartFile file, HttpServletRequest request) throws IOException, SQLException {
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_student");
         Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
 
-        if (file != null){
+        if (file != null) {
             byte[] bytes = file.getBytes();
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-            Image image = new Image(user.getId(),blob, null);
-            if (this.imageService.create(image)){
+            Image image = new Image(user.getId(), blob, null);
+            if (this.imageService.create(image)) {
 
             }
         }
 
         if (this.userService.update(user)) {
             if (this.studentService.update(student))
-                return "redirect:" + (previousPage != null ? previousPage : "/list_student_" + user.getDepartment().getId()) ;
+                return "redirect:" + (previousPage != null ? previousPage : "/list_student_" + user.getDepartment().getId());
         }
         return "admin_pages/list_student";
     }
@@ -345,25 +339,25 @@ public class AdminController {
         User user = this.userService.findById(id);
         String referer = request.getHeader("Referer");
         if (this.userService.delete(id))
-            return "redirect:" + (referer != null ? referer : "/list_student_" + user.getDepartment().getId()) ;
+            return "redirect:" + (referer != null ? referer : "/list_student_" + user.getDepartment().getId());
         return "admin_pages/list_student";
     }
 
 
     // Lecturer ===========================
     @GetMapping("admin_page/lecturer_management")
-    public String lecturer_management (Model model, Principal principal) {
+    public String lecturer_management(Model model, Principal principal) {
         List<Department> list = this.deptService.getAll();
         List<Map.Entry<Department, Integer>> mergedList = new ArrayList<>();
 
         // Ghép thông tin từ list1 và số lượng bằng cách sử dụng Map.Entry
-        for (Department department : list ) {
+        for (Department department : list) {
             int id = this.userService.numberOfStudentsInLecturer(department.getId());
             Map.Entry<Department, Integer> entry = new AbstractMap.SimpleEntry<>(department, id);
             mergedList.add(entry);
         }
 
-        model.addAttribute("list",  mergedList);
+        model.addAttribute("list", mergedList);
 
         return "admin_pages/manage/lecturer_management";
     }
@@ -374,8 +368,8 @@ public class AdminController {
     private LecturerService lecturerService;
 
     @GetMapping("admin_page/lecturer_management/list_lecturer_{id}")
-    public String list_lecturer (Model model, @PathVariable("id") Long id,
-                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+    public String list_lecturer(Model model, @PathVariable("id") Long id,
+                                @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
 
         //List<User> list = this.userService.findAllByLecturerInDept(id);
         Page<User> list = this.userService.getAllByLecturerInDept(id, pageNo);
@@ -400,7 +394,7 @@ public class AdminController {
 
     @PostMapping("/add_lecturer")
     public String save_lecturer(@ModelAttribute("user") User user,
-                                @Param("educationLevel") String educationLevel ,
+                                @Param("educationLevel") String educationLevel,
                                 @Param("position") String position,
                                 @Param("salary") Integer salary,
                                 @RequestParam("image_path") MultipartFile file,
@@ -409,16 +403,16 @@ public class AdminController {
         String referer = request.getHeader("Referer");
 
         if (this.userService.update(user)) {
-            Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position,salary, null);
+            Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position, salary, null);
             String email = convertToUsername(user.getFullname()) + "." + user.getId().toString() + "@gmail.com";
             user.setEmail(email);
             user.setPassword(passwordEncoder.encode("2002"));
 
-            if (file != null){
+            if (file != null) {
                 byte[] bytes = file.getBytes();
                 Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-                Image image = new Image(user.getId(),blob, null);
-                if (this.imageService.create(image)){
+                Image image = new Image(user.getId(), blob, null);
+                if (this.imageService.create(image)) {
 
                 }
             }
@@ -451,27 +445,27 @@ public class AdminController {
 
     @PostMapping("/edit_lecturer")
     public String update_lecturer(@ModelAttribute("user") User user,
-                                  @Param("educationLevel") String educationLevel ,
+                                  @Param("educationLevel") String educationLevel,
                                   @Param("position") String position,
                                   @Param("salary") Integer salary,
-                                  @RequestParam("imagePath") MultipartFile file,HttpServletRequest request) throws IOException, SQLException {
+                                  @RequestParam("imagePath") MultipartFile file, HttpServletRequest request) throws IOException, SQLException {
 
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_lecturer");
-        Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position , salary, null);
+        Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position, salary, null);
 
-        if (file != null){
+        if (file != null) {
             byte[] bytes = file.getBytes();
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-            Image image = new Image(user.getId(),blob, null);
-            if (this.imageService.create(image)){
+            Image image = new Image(user.getId(), blob, null);
+            if (this.imageService.create(image)) {
 
             }
         }
 
         if (this.userService.update(user)) {
             if (this.lecturerService.update(lecturer))
-                return "redirect:" + (previousPage != null ? previousPage : "/list_lecturer_" + user.getDepartment().getId()) ;
+                return "redirect:" + (previousPage != null ? previousPage : "/list_lecturer_" + user.getDepartment().getId());
         }
         return "admin_pages/list_lecturer";
     }
@@ -492,7 +486,7 @@ public class AdminController {
     private CourseClassService courseClassService;
 
     @GetMapping("admin_page/class_management")
-    public String class_management (Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+    public String class_management(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         //List<CourseClass> list = this.courseClassService.getAll();
         Page<CourseClass> list = this.courseClassService.getAll(pageNo);
         model.addAttribute("list", list);
@@ -514,6 +508,7 @@ public class AdminController {
 
         return "admin_pages/manage/class_management";
     }
+
     @PostMapping("/add_class")
     public String save_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
@@ -539,7 +534,7 @@ public class AdminController {
         model.addAttribute("list4", students);
 
         int index = 0;
-        for (Student student : _Course_class.getStudents()){
+        for (Student student : _Course_class.getStudents()) {
             index++;
         }
         model.addAttribute("numberOfStudents", index);
@@ -557,7 +552,7 @@ public class AdminController {
         HttpSession session = request.getSession();
         String previousPage = (String) session.getAttribute("previousPage_class");
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/class_management") ;
+            return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/class_management");
 
         }
         return "admin_pages/manage/class_management";
@@ -572,9 +567,10 @@ public class AdminController {
         return "admin_pages/manage/class_management";
     }
 
-    String[] WEEK_DAYS = { "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6"};
+    String[] WEEK_DAYS = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6"};
+
     @GetMapping("/scheduled")
-    public String scheduled() throws SQLException {
+    public String scheduled( HttpServletRequest request) throws SQLException {
         final long startTime = System.currentTimeMillis();
         Configuration configuration = new Configuration();
 
@@ -589,7 +585,7 @@ public class AdminController {
 
         Map<org.example.project.gaSchedule.model.CourseClass, Integer> classes = alg.getResult().getClasses();
 
-        for (org.example.project.gaSchedule.model.CourseClass cc : classes.keySet()){
+        for (org.example.project.gaSchedule.model.CourseClass cc : classes.keySet()) {
             // coordinate of time-space slot
             Reservation reservation = Reservation.getReservation(classes.get(cc));
             int dayId = reservation.getDay() + 1;
@@ -600,8 +596,8 @@ public class AdminController {
 
             Room room = alg.getResult().getConfiguration().getRoomById(roomId);
             courseClass.setRoom(room.Name);
-            courseClass.setSchedule(WEEK_DAYS[dayId - 1] + " , " +String.valueOf(courseClass.getCourse().getSessionDuration())
-                    + " tiết, bắt đầu từ kíp "+ String.valueOf(periodId));
+            courseClass.setSchedule(WEEK_DAYS[dayId - 1] + " , " + String.valueOf(courseClass.getCourse().getSessionDuration())
+                    + " tiết, bắt đầu từ kíp " + String.valueOf(periodId));
 
             if (this.courseClassService.create(courseClass)) {
 
@@ -611,10 +607,8 @@ public class AdminController {
         }
 
 
-
         String tempFilePath = System.getProperty("java.io.tmpdir") + "GaSchedule.htm";
-        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFilePath))))
-        {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFilePath)))) {
             writer.write(htmlResult);
             writer.flush();
         } catch (FileNotFoundException e) {
@@ -631,11 +625,9 @@ public class AdminController {
             // no application registered for html
         }
 
-
-
-        return "redirect:/class_management";
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
-
 
 
     // Func ===========================

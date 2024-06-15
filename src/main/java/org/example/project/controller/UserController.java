@@ -57,7 +57,7 @@ public class UserController {
 		model.addAttribute("user", userDetails);
 		return "admin_pages/profile";
 	}
-	@GetMapping("student-page")
+	@GetMapping("student_page")
 	public String studentPage (Model model, Principal principal, HttpSession session) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 
@@ -69,7 +69,7 @@ public class UserController {
 		return "student_pages/index";
 	}
 
-	@GetMapping("lecturer-page")
+	@GetMapping("lecturer_page")
 	public String lecturerPage (Model model, Principal principal, HttpSession session) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 

@@ -13,7 +13,7 @@
     <div class="h-19">
         <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden"></i>
         <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700"
-           href="/lecturer-page">
+           href="/lecturer_page">
             <img th:src="@{/assets/img/logo-ct-dark.png}"
                  class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8"
                  alt="main_logo"/>
@@ -30,7 +30,7 @@
         <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
                 <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-200 hover:text-slate-700"
-                   href="/lecturer-page">
+                   href="/lecturer_page">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="text-sm leading-normal text-blue-500 ni ni-shop"></i>
                     </div>
@@ -40,7 +40,7 @@
 
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                       href="/lecturer_schedule">
+                       href="/lecturer_page/schedule">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
                     </div>
@@ -90,7 +90,26 @@
 <!-- end sidenav -->
 
 <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+         navbar-main navbar-scroll="false">
+        <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+            <nav>
+                <!-- breadcrumb -->
+                <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
+                    <li class="text-sm leading-normal">
+                        <a class="text-white opacity-50" href="javascript:;">Main</a>
+                    </li>
+                    <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
+                        aria-current="page">
+                        Trang Chủ
+                    </li>
+                </ol>
+            </nav>
+
+            <div th:replace="fragments/navbar :: navbar"></div>
+
+        </div>
+    </nav>
 
 
     <!-- cards -->

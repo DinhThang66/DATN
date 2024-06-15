@@ -16,7 +16,7 @@ import java.security.Principal;
 public class StudentController {
     @Autowired
     private UserService userService;
-    @GetMapping("/schedule")
+    @GetMapping("student_page/schedule")
     public String profile (Model model, Principal principal, HttpSession session) {
         UserDetails userDetails = (UserDetails) session.getAttribute("user");
         String email = userDetails.getUsername();

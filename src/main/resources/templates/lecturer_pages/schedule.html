@@ -13,7 +13,7 @@
     <div class="h-19">
         <i class="absolute top-0 right-0 p-4 opacity-50 cursor-pointer fas fa-times dark:text-white text-slate-400 xl:hidden"></i>
         <a class="block px-8 py-6 m-0 text-sm whitespace-nowrap dark:text-white text-slate-700"
-           href="/lecturer-page">
+           href="/lecturer_page">
             <img th:src="@{/assets/img/logo-ct-dark.png}"
                  class="inline h-full max-w-full transition-all duration-200 dark:hidden ease-nav-brand max-h-8"
                  alt="main_logo"/>
@@ -30,7 +30,7 @@
         <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                   href="/lecturer-page">
+                   href="/lecturer_page">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="text-sm leading-normal text-blue-500 ni ni-shop"></i>
                     </div>
@@ -90,7 +90,26 @@
 <!-- end sidenav -->
 
 <main class="relative h-full max-h-screen transition-all duration-200 ease-in-out xl:ml-68 rounded-xl">
-    <div th:replace="fragments/navbar :: navbar"></div>
+    <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all ease-in shadow-none duration-250 rounded-2xl lg:flex-nowrap lg:justify-start"
+         navbar-main navbar-scroll="false">
+        <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
+            <nav>
+                <!-- breadcrumb -->
+                <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
+                    <li class="text-sm leading-normal">
+                        <a class="text-white opacity-50" href="javascript:;">Main</a>
+                    </li>
+                    <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
+                        aria-current="page">
+                        Thời khóa biểu
+                    </li>
+                </ol>
+            </nav>
+
+            <div th:replace="fragments/navbar :: navbar"></div>
+
+        </div>
+    </nav>
 
 
     <!-- cards -->
@@ -145,7 +164,7 @@
                                 <tr th:each="class : ${list}"
                                     class="dark:text-white dark:opacity-80 whitespace-nowrap rounded-lg px-4 transition-colors hover:bg-blue-200 hover:text-slate-700">
                                     <td class="px-6 py-3 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a th:href="@{/detailClass_{id}(id=${class.id})}">
+                                        <a th:href="@{/lecturer_page/schedule/detailClass_{id}(id=${class.id})}">
                                             <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
                                                 th:text="${#ids.seq ('')}"></h6>
 
@@ -153,7 +172,7 @@
                                     </td>
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <a class="flex px-2 py-1"
-                                           th:href="@{/detailClass_{id}(id=${class.id})}">
+                                           th:href="@{/lecturer_page/schedule/detailClass_{id}(id=${class.id})}">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal dark:text-white"
                                                     th:text="${class.id}"></h6>
@@ -164,7 +183,7 @@
 
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <a class="flex px-2 py-1"
-                                           th:href="@{/detailClass_{id}(id=${class.id})}">
+                                           th:href="@{/lecturer_page/schedule/detailClass_{id}(id=${class.id})}">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal dark:text-white"
                                                     th:text="${class.course.name}"></h6>
@@ -174,7 +193,7 @@
 
 
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <a th:href="@{/detailClass_{id}(id=${class.id})}">
+                                        <a th:href="@{/lecturer_page/schedule/detailClass_{id}(id=${class.id})}">
                                             <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80">
                                                 <span th:text="'Phòng ' + ${class.room}"></span><br>
                                                 <span th:text="${class.schedule}"></span>

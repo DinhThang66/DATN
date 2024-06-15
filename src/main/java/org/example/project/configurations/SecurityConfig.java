@@ -38,8 +38,8 @@ public class SecurityConfig {
 		
 		.authorizeHttpRequests(request -> request
 				.requestMatchers("/admin_page/**").hasAuthority("ADMIN")
-				.requestMatchers("/user-page").hasAuthority("student")
-				.requestMatchers("/user-page").hasAuthority("lecturer")
+				.requestMatchers("/student_page").hasAuthority("student")
+				.requestMatchers("/lecturer_page").hasAuthority("lecturer")
 
 				.requestMatchers("/registration", "/css/**", "/assets/**", "/resources/**","/resources/public/**").permitAll()
 				.anyRequest().authenticated())

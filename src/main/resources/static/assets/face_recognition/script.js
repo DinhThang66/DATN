@@ -1,9 +1,9 @@
 const imageUpload = document.getElementById('imageUpload');
 
 Promise.all([
-    faceapi.nets.faceRecognitionNet.loadFromUri('/assets/face_recognition/models'),
-    faceapi.nets.faceLandmark68Net.loadFromUri('/assets/face_recognition/models'),
-    faceapi.nets.ssdMobilenetv1.loadFromUri('/assets/face_recognition/models')
+    faceapi.nets.faceRecognitionNet.loadFromUri('http://localhost:8080/assets/face_recognition/models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('http://localhost:8080/assets/face_recognition/models'),
+    faceapi.nets.ssdMobilenetv1.loadFromUri('http://localhost:8080/assets/face_recognition/models')
 ]).then(()=>{
     start();
     saveLabeledImagesToFile();  // Lưu các mô tả khuôn mặt vào file
@@ -11,29 +11,24 @@ Promise.all([
 });
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/assets/face_recognition/sw.js')
-            .then(function(registration) {
-                // Registration was successful
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            })
-            .catch(function(err) {
-                // Registration failed
-                console.log('ServiceWorker registration failed: ', err);
-            });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/assets/face_recognition/sw1.js').then(registration => {
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, err => {
+            console.log('ServiceWorker registration failed: ', err);
+        });
     });
 }
 
 
-
-
 async function start() {
-    const container = document.createElement('div');
+    const container = document.getElementById('rightHalf');
+    //const container = document.createElement('div');
     container.style.position = 'relative';
-    document.body.append(container);
+    //  document.body.append(container);
     const labeledFaceDescriptors = await loadLabeledImages();
 
-    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+    const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.45);
     let image;
     let canvas;
     document.body.append('Loaded');

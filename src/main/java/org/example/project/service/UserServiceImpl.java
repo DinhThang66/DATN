@@ -137,4 +137,28 @@ public class UserServiceImpl implements UserService {
 		return new PageImpl<User>(list, pageable, this.findAllByLecturerInDept(id).size());
 	}
 
+	@Override
+	public List<User> getStudent(Long id, Long userId, String fullName) {
+		return this.userRepository.getStudent(id, userId, fullName);
+	}
+
+	@Override
+	public Page<User> getStudent(Long id, Long userId, String fullName, Integer pageNo) {
+		List<User> list = this.searchStudentByName(fullName);
+		//List<User> list = this.find(id, userId, fullName);
+
+
+
+
+		Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+		int start = (int) pageable.getOffset();
+		int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+		list = list.subList(start, end);
+
+		return new PageImpl<User>(list, pageable, this.findAllByLecturerInDept(id).size());
+	}
+
+
 }

@@ -12,6 +12,7 @@ public class Image {
     private Long id;
     @Lob
     private Blob imageData;
+
     @OneToOne
     @JoinColumn(name = "user_id", unique = true, referencedColumnName = "id")
     private User user;
