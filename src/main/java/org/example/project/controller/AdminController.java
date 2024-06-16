@@ -1,5 +1,6 @@
 package org.example.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.example.project.gaSchedule.HtmlOutput;
@@ -29,10 +30,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.awt.*;
 import java.io.*;
 import java.security.Principal;
+import java.sql.Array;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
@@ -246,14 +249,13 @@ public class AdminController {
         return "admin_pages/list_student";
     }
 
-
     @PostMapping("/add_student")
     public String save_student(@ModelAttribute("student") User user,
                                @Param("educationLevel") String educationLevel,
                                @Param("educationProgram") String educationProgram,
                                @Param("className") String className,
                                @RequestParam("image_path") MultipartFile file,
-                               HttpServletRequest request) throws IOException, SQLException {
+                               HttpServletRequest request, RedirectAttributes redirectAttributes) throws IOException, SQLException {
 
         user.setRole("student");
 
@@ -318,10 +320,12 @@ public class AdminController {
         String previousPage = (String) session.getAttribute("previousPage_student");
         Student student = new Student(user.getId(), educationLevel, educationProgram, className, null);
 
-        if (file != null) {
+        if (file.getBytes().length != 0) {
             byte[] bytes = file.getBytes();
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-            Image image = new Image(user.getId(), blob, null);
+            //Image image = new Image(user.getId(), blob, null);
+            Image image = this.imageService.findById(user.getId());
+            image.setImageData(blob);
             if (this.imageService.create(image)) {
 
             }
@@ -454,7 +458,9 @@ public class AdminController {
         String previousPage = (String) session.getAttribute("previousPage_lecturer");
         Lecturer lecturer = new Lecturer(user.getId(), educationLevel, position, salary, null);
 
-        if (file != null) {
+
+
+        if (file.getBytes().length != 0) {
             byte[] bytes = file.getBytes();
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
             Image image = new Image(user.getId(), blob, null);
@@ -462,6 +468,7 @@ public class AdminController {
 
             }
         }
+
 
         if (this.userService.update(user)) {
             if (this.lecturerService.update(lecturer))
@@ -627,6 +634,45 @@ public class AdminController {
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadDescriptor(@RequestBody UploadRequest request) {
+
+        List<Float> descriptor = request.getDescriptor();
+        Long userId = request.getUserId();
+
+        Image image = this.imageService.findById(request.getUserId());
+        image.setDescription(descriptor);
+        imageService.create(image);
+        System.out.println("Descriptor: " + image.getDescription());
+
+        //System.out.println("Descriptor: " + descriptor);
+        //System.out.println("User ID: " + userId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // Ghi dữ liệu vào file person.json
+            objectMapper.writeValue(new File("src/main/resources/static/assets/face_recognition/person.json"), request);
+            System.out.println("JSON file created successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return ResponseEntity.ok("Descriptor saved successfully");
+    }
+
+    @PostMapping("/write-json")
+    public String writeJsonToFile(@RequestBody UploadRequest request) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // Ghi dữ liệu vào file person.json
+            objectMapper.writeValue(new File("person.json"), request);
+            return "JSON file created successfully";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Error occurred while writing JSON to file";
+        }
     }
 
 

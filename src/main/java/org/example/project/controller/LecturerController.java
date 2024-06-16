@@ -1,19 +1,23 @@
 package org.example.project.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
-import org.example.project.model.CourseClass;
-import org.example.project.model.Student;
-import org.example.project.model.User;
+import org.example.project.model.*;
 import org.example.project.service.UserService;
 import org.example.project.service.courseClass.CourseClassService;
+import org.example.project.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -54,9 +58,28 @@ public class LecturerController {
         return "fragments/navbar";
     }
 
-
+    @Autowired
+    private ImageService imageService;
     @GetMapping("/admin_page/test")
     public String index1(Model model) {
+        List<Image> list = this.imageService.getAll();
+        List<UploadRequest> userDescriptors = new ArrayList<>();
+
+
+        for(Image image : list){
+            Long label = image.getId();
+            List<Float> description = image.getDescription();
+            if (!description.isEmpty())
+                userDescriptors.add(new UploadRequest(description, label));
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File("src/main/resources/static/assets/face_recognition/data.json"), userDescriptors);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         return "admin_pages/index1";
     }
@@ -66,4 +89,6 @@ public class LecturerController {
 
         return "admin_pages/test";
     }
+
+
 }

@@ -91,7 +91,6 @@
                     </div>
                 </div>
             </li>
-            <script src="../assets/js/alpine.js" async></script>
 
             <li class="mt-0.5 w-full">
                 <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
@@ -362,7 +361,7 @@
 
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
-                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required="required" onchange="displayImage()"
+                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onchange="displayImage()"
                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                     </div>
                 </div>
@@ -592,7 +591,8 @@
         img.style.display = "block";
     }
 </script>
-
+<script defer th:src="@{/assets/face_recognition/face-api.min.js}"></script>
+<script defer th:src="@{/assets/face_recognition/script.js}"></script>
 <!-- -->
 
 <div th:replace="fragments/fixed-plugin :: fixed-plugin"></div>
