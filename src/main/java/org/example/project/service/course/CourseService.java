@@ -17,4 +17,6 @@ public interface CourseService {
     List<Course> searchCourseByDept(Long keyword);
     Page<Course> getAll(Integer pageNo);
     Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo);
+
+    Integer numberOfCourses();
 }

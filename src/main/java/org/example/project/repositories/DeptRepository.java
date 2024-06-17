@@ -10,5 +10,6 @@ import java.util.List;
 public interface DeptRepository extends JpaRepository<Department, Long> {
     @Query("select d from Department d where d.name like %?1%")
     List<Department> searchDept(String keyword);
-
+    @Query("select COUNT(*) from Department d")
+    Integer numberOfDepts();
 }

@@ -160,5 +160,15 @@ public class UserServiceImpl implements UserService {
 		return new PageImpl<User>(list, pageable, this.findAllByLecturerInDept(id).size());
 	}
 
+	@Override
+	public Integer numberOfAllStudents() {
+		return this.userRepository.numberOfAllStudents();
+	}
+
+	@Override
+	public Integer numberOfAllLecturers() {
+		return this.userRepository.numberOfAllLecturers();
+	}
+
 
 }

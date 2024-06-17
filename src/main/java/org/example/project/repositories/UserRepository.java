@@ -37,4 +37,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<User> getStudent(@Param("departmentId") Long departmentId, @Param("userId") Long userId, @Param("fullName") String fullName);
 
 
+	@Query("select COUNT(*) from User u where u.role = 'student'")
+	Integer numberOfAllStudents();
+	@Query("select COUNT(*) from User u where u.role = 'lecturer'")
+	Integer numberOfAllLecturers();
 }

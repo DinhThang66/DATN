@@ -14,4 +14,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> searchCourseByName(String keyword);
     @Query("select c from Course c where c.department.id = ?1")
     List<Course> searchCourseByDept(Long keyword);
+
+    @Query("select COUNT(*) from Course c")
+    Integer numberOfCourses();
 }

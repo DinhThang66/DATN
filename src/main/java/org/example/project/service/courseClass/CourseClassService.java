@@ -15,5 +15,7 @@ public interface CourseClassService {
     List<Student> getAllStudents();
     List<Student> getStudentsByClassId(Long ClassId);
     Page<CourseClass> getAll(Integer pageNo);
+    Integer numberOfClassesInDept(Long id);
+
 
 }

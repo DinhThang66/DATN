@@ -82,4 +82,9 @@ public class DeptServiceImpl implements DeptService{
         list = list.subList(start, end);
         return new PageImpl<Department>(list, pageable, this.searchDept(keyword).size());
     }
+
+    @Override
+    public Integer numberOfDepts() {
+        return this.deptRepository.numberOfDepts();
+    }
 }

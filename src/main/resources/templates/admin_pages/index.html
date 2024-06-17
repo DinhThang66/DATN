@@ -166,8 +166,151 @@
         </div>
     </nav>
 
+    <div class="w-full px-6 py-6 mx-auto">
 
-    <!-- cards -->
+        <div class="flex flex-wrap -mx-3">
+
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+                <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border  border-t-4 border-red">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p class="mb-0 font-sans font-semibold leading-normal uppercase dark:text-white dark:opacity-60 text-sm">
+                                        Tổng số khoa</p>
+                                    <h5 class="mb-2 font-bold dark:text-white text-red" th:text="${numberOfDepts}"></h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        Khoa/Viện
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div class="inline-block w-12 h-12 text-center rounded-circle bg-gradient-to-tl from-blue-500 to-violet-500">
+                                    <i class="ni ni-building text-lg relative top-3.5 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+                <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border  border-t-4 border-blue">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p class="mb-0 font-sans font-semibold leading-normal uppercase dark:text-white dark:opacity-60 text-sm">
+                                        Tổng số sinh viên</p>
+                                    <h5 class="mb-2 font-bold dark:text-white text-blue" th:text="${numberOfAllStudents}"></h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        Sinh Viên
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div class="inline-block w-12 h-12 text-center rounded-circle bg-gradient-to-tl from-red-600 to-orange-600">
+                                    <i class="ni ni-user-run text-lg relative top-3.5 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-full px-3 mb-6 sm:w-1/2 sm:flex-none xl:mb-0 xl:w-1/4">
+                <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border  border-t-4 border-green">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p class="mb-0 font-sans font-semibold leading-normal uppercase dark:text-white dark:opacity-60 text-sm">
+                                        Tổng số giảng viên</p>
+                                    <h5 class="mb-2 font-bold dark:text-white text-green" th:text="${numberOfAllLecturers}"></h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        Giảng Viên
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div class="inline-block w-12 h-12 text-center rounded-circle bg-gradient-to-tl from-emerald-500 to-teal-400">
+                                    <i class="ni ni-paper-diploma text-lg relative top-3.5 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full max-w-full px-3 sm:w-1/2 sm:flex-none xl:w-1/4">
+                <div class="relative flex flex-col min-w-0 break-words bg-white shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border  border-t-4 border-orange">
+                    <div class="flex-auto p-4">
+                        <div class="flex flex-row -mx-3">
+                            <div class="flex-none w-2/3 max-w-full px-3">
+                                <div>
+                                    <p class="mb-0 font-sans font-semibold leading-normal uppercase dark:text-white dark:opacity-60 text-sm">
+                                        Tổng số môn học</p>
+                                    <h5 class="mb-2 font-bold dark:text-white text-orange" th:text="${numberOfCourses}"></h5>
+                                    <p class="mb-0 dark:text-white dark:opacity-60">
+                                        Môn Học
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="px-3 text-right basis-1/3">
+                                <div class="inline-block w-12 h-12 text-center rounded-circle bg-gradient-to-tl from-orange-500 to-yellow-500">
+                                    <i class="ni ni-books text-lg relative top-3.5 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="flex flex-wrap mt-6 -mx-3">
+            <div class="w-full max-w-full px-3 mt-0 mb-6 lg:mb-0 lg:w-5/12 lg:flex-none">
+                <div class="relative flex flex-col min-w-0 break-words bg-white border-0 border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl dark:bg-gray-950 border-black-125 rounded-2xl bg-clip-border">
+                    <div class="p-4 pb-0 mb-0 rounded-t-4">
+                        <div class="flex justify-between">
+                            <h6 class="mb-2 dark:text-white">Lớp học của từng khoa</h6>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="items-center w-full mb-4 align-top border-collapse border-gray-200 dark:border-white/40">
+                            <tbody>
+                            <tr th:each="entry : ${mergedList}">
+                                <td class="p-2 align-middle bg-transparent border-b w-3/10 whitespace-nowrap dark:border-white/40">
+                                    <div class="flex items-center px-2 py-1">
+                                        <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
+                                            th:text="${#ids.seq ('')}"></h6>
+                                        <div class="ml-6">
+                                            <p class="mb-0 font-semibold leading-tight dark:text-white text-xs dark:opacity-60" th:text="${entry.key.dept_id}"></p>
+                                            <h6 class="mb-0 leading-normal text-sm dark:text-white" th:text="${entry.key.name}"></h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-2 align-middle bg-transparent border-b whitespace-nowrap dark:border-white/40">
+                                    <div class="text-center">
+                                        <p class="mb-0 font-semibold leading-tight dark:text-white text-xs dark:opacity-60">
+                                            Số lớp học:</p>
+                                        <h6 class="mb-0 leading-normal text-sm dark:text-white" th:text="${entry.value}">2500</h6>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!--
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
             <div class="flex-none w-full max-w-full px-3">
@@ -178,10 +321,8 @@
                 </div>
             </div>
         </div>
-
-
     </div>
-    <!-- end cards -->
+    -->
 </main>
 <div th:replace="fragments/fixed-plugin :: fixed-plugin"></div>
 </body>

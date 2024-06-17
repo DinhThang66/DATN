@@ -94,7 +94,10 @@ public class CourseServiceImpl implements CourseService{
         return new PageImpl<Course>(list, pageable, this.searchCourseByName(keywordName).size());
     }
 
-
+    @Override
+    public Integer numberOfCourses() {
+        return this.courseRepository.numberOfCourses();
+    }
 
 
 }

@@ -71,4 +71,9 @@ public class CourseClassServiceImpl implements CourseClassService {
         Pageable pageable = PageRequest.of(pageNo - 1, 8);
         return this.courseClassRepository.findAll(pageable);
     }
+
+    @Override
+    public Integer numberOfClassesInDept(Long id) {
+        return this.courseClassRepository.numberOfClassesInDept(id);
+    }
 }
