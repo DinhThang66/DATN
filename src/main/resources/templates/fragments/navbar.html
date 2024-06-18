@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<div th:fragment="navbar" class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
+<div th:fragment="navbar (param1, param2)" class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
     <div class="flex items-center md:ml-auto md:pr-4">
         <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease">
                   <span class="text-sm ease leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
@@ -143,8 +143,8 @@
                          th:src="@{/assets/img/team-2.jpg}" alt="profile image">
                 </li>
                 <li class="w-60 bg-blue-500 flex flex-col pl-2 -mt-2 pt-1 rounded-1.4">
-                    <div class="text-white font-semibold" th:text="${userName}">Mark Davis</div>
-                    <div class="text-white" >markDavis@gmail.com</div>
+                    <div class="text-white font-semibold" th:text="${param1}">Mark Davis</div>
+                    <div class="text-white" th:text="${param2}">markDavis@gmail.com</div>
 
                 </li>
                 <li class="flex justify-between items-center pt-2">

@@ -163,7 +163,7 @@
                 <h6 class="mb-0 font-bold text-white capitalize">Thông tin lớp</h6>
             </nav>
 
-            <div th:replace="fragments/navbar :: navbar"></div>
+            <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()})"></div>
 
         </div>
     </nav>

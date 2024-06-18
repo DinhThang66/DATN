@@ -4,6 +4,7 @@ package org.example.project.controller;
 import jakarta.servlet.http.HttpSession;
 import org.example.project.dto.UserDto;
 import org.example.project.model.Department;
+import org.example.project.model.User;
 import org.example.project.service.UserService;
 import org.example.project.service.course.CourseService;
 import org.example.project.service.courseClass.CourseClassService;
@@ -59,6 +60,8 @@ public class UserController {
 	public String adminPage (Model model, Principal principal) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 		model.addAttribute("user", userDetails);
+		User user = this.userService.findByUserName(userDetails.getUsername());
+		model.addAttribute("userParam", user);
 
 		model.addAttribute("numberOfDepts", this.deptService.numberOfDepts());
 		model.addAttribute("numberOfAllStudents", this.userService.numberOfAllStudents());
@@ -73,7 +76,6 @@ public class UserController {
 			Map.Entry<Department, Integer> entry = new AbstractMap.SimpleEntry<>(department, id);
 			mergedList.add(entry);
 		}
-
 		model.addAttribute("mergedList", mergedList);
 
 
@@ -91,9 +93,7 @@ public class UserController {
 	@GetMapping("student_page")
 	public String studentPage (Model model, Principal principal, HttpSession session) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-
 		model.addAttribute("user", userDetails);
-
 		session.setAttribute("user", userDetails);
 
 
@@ -103,9 +103,7 @@ public class UserController {
 	@GetMapping("lecturer_page")
 	public String lecturerPage (Model model, Principal principal, HttpSession session) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
-
 		model.addAttribute("user", userDetails);
-
 		session.setAttribute("user", userDetails);
 
 
