@@ -16,6 +16,9 @@
 .h-3 {
     height: 0.75rem;
 }
+.h-25 {
+    width: 6.25rem;
+}
 .h-60 {
     height: 15rem;
 }
@@ -114,3 +117,8 @@
 }
 
 .text-2xl {font-size: 2.5rem;line-height: 0.5rem;}
+
+.border-radius {border-radius: 50%; /* Tạo hình tròn */}
+
+.min-h-25 {min-height: 6.25rem;}
+.min-h-30 {min-height: 7.5rem;}

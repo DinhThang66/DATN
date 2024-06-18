@@ -88,6 +88,9 @@ public class UserController {
 	public String profile (Model model, Principal principal) {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 		model.addAttribute("user", userDetails);
+		User user = this.userService.findByUserName(userDetails.getUsername());
+		model.addAttribute("userParam", user);
+
 		return "admin_pages/profile";
 	}
 	@GetMapping("student_page")
@@ -95,7 +98,8 @@ public class UserController {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 		model.addAttribute("user", userDetails);
 		session.setAttribute("user", userDetails);
-
+		User user = this.userService.findByUserName(userDetails.getUsername());
+		model.addAttribute("userParam", user);
 
 		return "student_pages/index";
 	}
@@ -105,6 +109,8 @@ public class UserController {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
 		model.addAttribute("user", userDetails);
 		session.setAttribute("user", userDetails);
+		User user = this.userService.findByUserName(userDetails.getUsername());
+		model.addAttribute("userParam", user);
 
 
 		return "lecturer_pages/index";

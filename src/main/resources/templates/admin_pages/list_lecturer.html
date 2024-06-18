@@ -152,7 +152,7 @@
                 <h6 class="mb-0 font-bold text-white capitalize" th:text="'Giảng viên/'+' '+ ${nameDept}"></h6>
             </nav>
 
-            <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()})"></div>
+            <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()}, param3=${userParam.getId()})"></div>
 
         </div>
     </nav>

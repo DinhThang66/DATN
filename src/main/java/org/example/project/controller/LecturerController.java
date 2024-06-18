@@ -9,6 +9,7 @@ import org.example.project.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +28,14 @@ public class LecturerController {
     private UserService userService;
     @Autowired
     private CourseClassService courseClassService;
+    @Autowired
+    private UserDetailsService userDetailsService;
     @GetMapping("lecturer_page/schedule")
     public String profile (Model model, Principal principal, HttpSession session) {
         UserDetails userDetails = (UserDetails) session.getAttribute("user");
         String email = userDetails.getUsername();
         User user = this.userService.findByUserName(email);
+        model.addAttribute("userParam", user);
 
         model.addAttribute("list", user.getLecturer().getClasses());
 
@@ -47,8 +51,27 @@ public class LecturerController {
 
         CourseClass courseClass = this.courseClassService.findById(id);
         model.addAttribute("class", courseClass);
+
+        //++++
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        User user = this.userService.findByUserName(userDetails.getUsername());
+        model.addAttribute("userParam", user);
+
         return "lecturer_pages/detailClass";
     }
+
+    @GetMapping("lecturer_page/profile")
+    public String profile (Model model, Principal principal) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", userDetails);
+        User user = this.userService.findByUserName(userDetails.getUsername());
+        model.addAttribute("userParam", user);
+
+        return "lecturer_pages/profile";
+    }
+
+
+
     @GetMapping("/")
     public String index(Model model) {
         String x = "dinh van thang";
