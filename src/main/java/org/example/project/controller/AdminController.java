@@ -717,6 +717,7 @@ public class AdminController {
         return ResponseEntity.ok("Descriptor saved successfully");
     }
 
+    /*
     @PostMapping("/write-json")
     public String writeJsonToFile(@RequestBody UploadRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -729,7 +730,7 @@ public class AdminController {
             return "Error occurred while writing JSON to file";
         }
     }
-
+     */
 
     // Func ===========================
     public static String convertToUsername(String name) {

@@ -122,3 +122,7 @@
 
 .min-h-25 {min-height: 6.25rem;}
 .min-h-30 {min-height: 7.5rem;}
+
+.bg-emerald-600 {
+    background-color: #a7f3d0;
+}

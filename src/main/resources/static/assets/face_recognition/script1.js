@@ -45,7 +45,7 @@ async function start() {
     const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
     const resizedDetections = faceapi.resizeResults(detections, displaySize)
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
-    console.log('oke')
+    console.log(results)
 
     results.forEach((result, i) => {
       const box = resizedDetections[i].detection.box
@@ -55,6 +55,7 @@ async function start() {
   })
 }
 
+/*
 function loadLabeledImages() {
   const labels = ['Black Widow', 'Captain America', 'Captain Marvel', 'Hawkeye', 'Jim Rhodes', 'Thor', 'Tony Stark']
   return Promise.all(
@@ -70,7 +71,7 @@ function loadLabeledImages() {
     })
   )
 }
-
+ */
 
 async function loadLabeledFaceDescriptorsFromFile(file) {
   try {

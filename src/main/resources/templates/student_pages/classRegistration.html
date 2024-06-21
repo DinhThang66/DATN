@@ -39,7 +39,7 @@
             </li>
 
             <li class="mt-0.5 w-full">
-                <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-200 hover:text-slate-700"
+                <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
                    href="/student_page/schedule">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-orange-500 ni ni-calendar-grid-58"></i>
@@ -49,7 +49,7 @@
             </li>
 
             <li class="mt-0.5 w-full" th:if="${Open_class_registration}">
-                <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
+                <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-200 hover:text-slate-700"
                    href="/student_page/classRegistration">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-archive-2"></i>
@@ -57,6 +57,7 @@
                     <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Đăng ký lớp học</span>
                 </a>
             </li>
+
 
             <li class="w-full mt-4">
                 <h6 class="pl-6 ml-2 text-xs font-bold leading-tight uppercase dark:text-white opacity-60">Account
@@ -90,7 +91,7 @@
                     </li>
                     <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
                         aria-current="page">
-                        Thời khóa biểu
+                        Đăng ký lớp
                     </li>
                 </ol>
             </nav>
@@ -107,7 +108,7 @@
             <div class="flex-none w-full max-w-full px-3">
                 <div class="relative flex flex-col min-w-0 mb-6 break-words bg-white border-0 border-transparent border-solid shadow-xl dark:bg-slate-850 dark:shadow-dark-xl rounded-2xl bg-clip-border">
                     <div class="p-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between">
-                        <h6 class="dark:text-white">Danh sách sinh viên</h6>
+                        <h6 class="dark:text-white">Danh sách lớp được mở</h6>
                     </div>
 
 
@@ -124,8 +125,14 @@
                                     <img src="../assets/img/ic/ic_search.svg" class="w-5 h-5 text-white" alt="Icon">
                                     <span>Tìm kiếm</span>
                                 </button>
+                                <button type="button" id="fetch-students-btn"
+                                        class="inline-flex items-center px-2 py-2.5 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-green-600 to-lime-400 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
+                                    <img th:src="@{/assets/img/ic/ic_data_check.svg}" class="w-5 h-5 text-white" alt="Icon">
+                                    <span>Các lớp đã đăng ký</span>
+                                </button>
                             </div>
                         </div>
+
 
                     </form>
                     <div class="flex-auto px-0 pt-0 pb-2">
@@ -136,21 +143,22 @@
                                     <th class="px-5 py-3 w-10 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         STT
                                     </th>
-                                    <th class="px-6 py-3  font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                    <th class="px-6 py-3 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         Học phần
-                                    </th>
-                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Điểm
                                     </th>
                                     <th class="px-6 py-3 pl-2 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal text-slate-400 opacity-70">
                                         Lịch học
                                     </th>
-                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
-                                        Vắng
-                                    </th>
                                     <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
                                         Giảng Viên
                                     </th>
+                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
+                                        Trạng thái
+                                    </th>
+                                    <th class="px-6 py-3 pl-2 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal  text-slate-400 opacity-70">
+                                        Đăng ký/Hủy
+                                    </th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -171,35 +179,81 @@
                                         </div>
                                     </td>
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            ></h6>
-                                    </td>
-
-                                    <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80">
                                             <span th:text="'Phòng ' + ${class.room}"></span><br>
                                             <span th:text="${class.schedule}"></span>
                                         </h6>
                                     </td>
-
-                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
-                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            ></h6>
-                                    </td>
-
                                     <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
                                             th:text="${class.lecturer.user.fullname}"></h6>
                                     </td>
-
+                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
+                                        <div th:each="item : ${courseClasses}">
+                                            <span th:if="${item.getId() == class.getId()}" class="bg-emerald-600 text-emerald-500 px-2 text-xxs rounded-1 py-1.75 inline-block whitespace-nowrap text-center align-baseline font-bold uppercase leading-none">Đã đăng ký</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
+                                        <button class="px-4 py-1.4 text-sm font-semibold rounded-full text-xs text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75" th:onclick="'addStudentToClass(' + ${class.id} + ', ' + ${userParam.id} + ')'">Đăng ký/Hủy</button>
+                                    </td>
                                 </tr>
-
-
-
                                 </tbody>
                             </table>
-
                         </div>
+
+                        <script>
+                            function addStudentToClass(classId, studentId) {
+                                fetch(`/student_page/api/addStudentToClass?classId=${classId}&studentId=${studentId}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            return response.text(); // Sử dụng .text() để đọc phản hồi văn bản
+                                        } else {
+                                            throw new Error('Network response was not ok.');
+                                        }
+                                    })
+                                    .then(data => {
+                                        console.log('Success:', data);
+                                        // Refresh lại trang
+                                        window.location.reload();
+                                    })
+                                    .catch(error => {
+                                        console.error('There was a problem with the fetch operation:', error);
+                                    });
+                            }
+                        </script>
+
+                        <div class="float-right m-4">
+                            <nav aria-label="">
+                                <ul class="flex items-center -space-x-px h-8 text-sm">
+                                    <li>
+                                        <a th:if="${currentPage} > 1"
+                                           th:href="@{'?pageNo=' + ${currentPage - 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                            <<
+                                        </a>
+                                    </li>
+                                    <li th:if="${totalPage > 1}" th:each="i:${#numbers.sequence(1, totalPage)}">
+                                        <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
+                                           th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
+                                           th:href="@{'?pageNo=' + ${i}}" th:text="${i}">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a th:if="${currentPage} < ${totalPage}"
+                                           th:href="@{'?pageNo=' + ${currentPage + 1}}"
+                                           class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
+                                            >>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
                     </div>
 
                 </div>
@@ -208,7 +262,6 @@
     </div>
     <!-- end cards -->
 </main>
-
 
 
 <div th:replace="fragments/fixed-plugin :: fixed-plugin"></div>

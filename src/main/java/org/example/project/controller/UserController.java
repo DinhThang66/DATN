@@ -37,6 +37,8 @@ public class UserController {
 	private CourseService courseService;
 	@Autowired
 	private CourseClassService courseClassService;
+	@Autowired
+	private ToggleStateController toggleStateController;
 	
 	
 	@GetMapping("/registration")
@@ -100,6 +102,8 @@ public class UserController {
 		session.setAttribute("user", userDetails);
 		User user = this.userService.findByUserName(userDetails.getUsername());
 		model.addAttribute("userParam", user);
+
+		model.addAttribute("Open_class_registration", this.toggleStateController.getState());
 
 		return "student_pages/index";
 	}

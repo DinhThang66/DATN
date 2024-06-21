@@ -4,6 +4,7 @@ import org.example.project.model.CourseClass;
 import org.example.project.model.Student;
 import org.example.project.model.User;
 import org.example.project.repositories.CourseClassRepository;
+import org.example.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,8 @@ import java.util.Optional;
 public class CourseClassServiceImpl implements CourseClassService {
     @Autowired
     private CourseClassRepository courseClassRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public List<CourseClass> getAll() {
         return this.courseClassRepository.findAll();
@@ -76,4 +79,16 @@ public class CourseClassServiceImpl implements CourseClassService {
     public Integer numberOfClassesInDept(Long id) {
         return this.courseClassRepository.numberOfClassesInDept(id);
     }
+
+    @Override
+    public void deleteStudentFromClass(Long classId, Long studentId) {
+        this.courseClassRepository.deleteStudentFromClass(classId, studentId);
+    }
+
+    @Override
+    public void addStudentToClass(Long classId, Long studentId) {
+        this.courseClassRepository.addStudentToClass(classId, studentId);
+    }
+
+
 }

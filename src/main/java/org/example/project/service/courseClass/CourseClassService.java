@@ -16,6 +16,7 @@ public interface CourseClassService {
     List<Student> getStudentsByClassId(Long ClassId);
     Page<CourseClass> getAll(Integer pageNo);
     Integer numberOfClassesInDept(Long id);
-
+    void deleteStudentFromClass(Long classId, Long studentId);
+    void addStudentToClass(Long classId, Long studentId);
 
 }
