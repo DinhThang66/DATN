@@ -136,12 +136,15 @@
 
                     </form>
                     <div class="flex-auto px-0 pt-0 pb-2">
-                        <div class="p-0 overflow-x-auto">
+                        <div class="p-0 overflow-x-auto" id="table">
                             <table class="items-center justify-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
                                 <thead class="align-bottom">
                                 <tr>
                                     <th class="px-5 py-3 w-10 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         STT
+                                    </th>
+                                    <th class="px-6 py-3 w-10 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
+                                        Mã lớp
                                     </th>
                                     <th class="px-6 py-3 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         Học phần
@@ -168,6 +171,10 @@
                                     <td class="px-6 py-3 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
                                             th:text="${#ids.seq ('')}"></h6>
+                                    </td>
+                                    <td class="px-6 py-3 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
+                                        <h6 class="mb-0 text-xs font-semibold leading-tight dark:text-white dark:opacity-80"
+                                            th:text="${class.id}"></h6>
                                     </td>
 
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
@@ -200,7 +207,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                         <script>
                             function addStudentToClass(classId, studentId) {
                                 fetch(`/student_page/api/addStudentToClass?classId=${classId}&studentId=${studentId}`, {
@@ -219,7 +225,10 @@
                                     .then(data => {
                                         console.log('Success:', data);
                                         // Refresh lại trang
-                                        window.location.reload();
+                                        if (data[0]=="T"){
+                                            alert(data)
+                                        }else
+                                            window.location.reload();
                                     })
                                     .catch(error => {
                                         console.error('There was a problem with the fetch operation:', error);

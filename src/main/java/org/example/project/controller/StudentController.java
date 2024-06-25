@@ -102,7 +102,6 @@ public class StudentController {
         User user = this.userService.findById(studentId);
         Set<CourseClass> classes = user.getStudent().getClasses();
 
-
         try {
             Iterator<CourseClass> iterator = classes.iterator();
             boolean removed = false;
@@ -114,9 +113,15 @@ public class StudentController {
                     this.courseClassService.deleteStudentFromClass(classId, studentId);
                     break;
                 }
+                if (Objects.equals(item.getCourse().getId(), courseClass.getCourse().getId()))
+                    return ResponseEntity.ok("Trùng học phần");
             }
             if (!removed) {
+                if (Check(courseClass, user.getStudent())!=0)
+                    return ResponseEntity.ok("Trùng lịch học với mã lớp: " + Check(courseClass, user.getStudent()));
+
                 this.courseClassService.addStudentToClass(classId, studentId);
+
             }
             return ResponseEntity.ok("Student added to class successfully");
         } catch (Exception e) {
@@ -124,31 +129,28 @@ public class StudentController {
         }
     }
 
-    boolean Check(CourseClass courseClass, Student student) {
+    Integer Check(CourseClass courseClass, Student student) {
         Set<CourseClass> classes = student.getClasses();
+
         List<Integer> numbers1 = extractNumbers(courseClass.getSchedule());
         if (courseClass.getRoom()==null|| courseClass.getSchedule()==null)
-            return false;
+            return 0;
         for (CourseClass item : classes) {
-            if (item.getRoom()==null|| item.getSchedule()==null)
-                return false;
-            if (!Objects.equals(item.getRoom(), courseClass.getRoom()))
-                return false;
             List<Integer> numbers2 = extractNumbers(item.getSchedule());
             if (!Objects.equals(numbers1.get(0), numbers2.get(0)))
-                return false;
+                continue;
             int duration = numbers1.get(1);
             int startingFromPeriod = numbers1.get(2);
             while (duration!=0){
                 for (int i =numbers2.get(2);i<numbers2.get(1)+numbers2.get(2);i++){
                     if(i==startingFromPeriod)
-                        return false;
+                        return item.getId().intValue();
                 }
                 startingFromPeriod++;
                 duration--;
             }
         }
-        return true;
+        return 0;
     }
     List<Integer> extractNumbers(String input){
         List<Integer> numbers = new ArrayList<>();

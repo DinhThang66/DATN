@@ -26,15 +26,15 @@ public class HtmlOutput
 	private static String getTableHeader(Room room)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("<tr><th style='border: .1em solid black' scope='col' colspan='2'>Room: ");
+		sb.append("<tr><th style='border: .1em solid black' scope='col' colspan='2'>Phòng học: ");
 		sb.append(room.Name);
 		sb.append("</th>\n");
 		for(String weekDay : WEEK_DAYS)
 		sb.append("<th style='border: .1em solid black; padding: .25em; width: 15%' scope='col' rowspan='2'>").append(weekDay).append("</th>\n");
 		sb.append("</tr>\n");
 		sb.append("<tr>\n");
-		sb.append("<th style='border: .1em solid black; padding: .25em'>Lab: ").append(room.Lab ? "Yes" : "No").append("</th>\n");
-		sb.append("<th style='border: .1em solid black; padding: .25em'>Seats: ").append(room.NumberOfSeats).append("</th>\n");
+		sb.append("<th style='border: .1em solid black; padding: .25em'>Lab: ").append(room.Lab ? "Có" : "Không	").append("</th>\n");
+		sb.append("<th style='border: .1em solid black; padding: .25em'>Chỗ ngồi: ").append(room.NumberOfSeats).append("</th>\n");
 		sb.append("</tr>\n");
 		return sb.toString();
 	}
@@ -42,8 +42,8 @@ public class HtmlOutput
 	private static String getCourseClass(final CourseClass cc, final boolean[] criterias, final int ci)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append(cc.Course.Name).append("<br />").append(cc.Professor.Name).append("<br />");
-		sb.append(String.join("/", cc.Groups.stream().map(grp -> grp.Name).collect(Collectors.toList())));
+		sb.append(cc.Course.Name).append("<br />").append(cc.Professor.Name).append("<br />").append("Mã lớp:" +" " + cc.Id).append("<br />");
+		//sb.append(String.join("/", cc.Groups.stream().map(grp -> grp.Name).collect(Collectors.toList())));
 		sb.append("<br />");
 		if (cc.LabRequired)
 			sb.append("Lab<br />");

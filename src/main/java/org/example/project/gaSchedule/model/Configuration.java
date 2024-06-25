@@ -97,17 +97,6 @@ public class Configuration
 
 	private Map<Integer, Course> loadCourses() throws SQLException{
 		Map<Integer, Course> courses = new TreeMap<>();
-		/*
-		courses.put(1, new Course(1, "Introduction to Programming"));
-		courses.put(2, new Course(2, "Introduction to Computer Architecture"));
-		courses.put(3, new Course(3, "Business Applications"));
-		courses.put(4, new Course(4, "English"));
-		courses.put(5, new Course(5, "Discrete Mathematic I"));
-		courses.put(6, new Course(6, "Linear Algebra"));
-		courses.put(7, new Course(7, "Introduction to Information Technology I"));
-		courses.put(8, new Course(8, "System Administration and Maintenance I"));
-		 */
-
 		String query = "SELECT id, name, session_duration FROM course";
 
 		try (Connection conn = DatabaseUtil.getConnection();
@@ -120,7 +109,7 @@ public class Configuration
 				int session_duration = rs.getInt("session_duration");
 
 				String name = rs.getString("name");
-				courses.put(index++, new Course(id, name, session_duration));
+				courses.put(id, new Course(id, name, session_duration));
 			}
 		}
 
@@ -129,10 +118,10 @@ public class Configuration
 
 	private Map<Integer, Room> loadRooms() {
 		Map<Integer, Room> rooms = new TreeMap<>();
-		rooms.put(0, new Room("D5-101", false, 50));
-		rooms.put(1, new Room("R6", true, 50));
-		rooms.put(2, new Room("R7", true, 60));
-		rooms.put(3, new Room("D5-102", true, 60));
+		rooms.put(0, new Room("D5-101", false, 20));
+		rooms.put(1, new Room("D5-102", true, 20));
+		rooms.put(2, new Room("D5-103", true, 25));
+		//rooms.put(3, new Room("D5-102", true, 60));
 
 		return rooms;
 	}
