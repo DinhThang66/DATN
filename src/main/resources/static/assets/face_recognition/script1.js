@@ -24,16 +24,33 @@ async function start() {
   console.log({labeledFaceDescriptors})
 
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6)
-  let image
+  let image = new Image()
   let canvas
   document.body.append('Loaded')
 
-  imageUpload.addEventListener('change', async () => {
+  const captureButton = document.getElementById('captureButton');
+  captureButton.addEventListener('click', async () => {
+    const img_capture = document.getElementById('img_capture')
+    if (img_capture)
+      img_capture.remove()
+    else
+      console.log("ko ton tai")
+  // Kiểm tra xem có tệp nào đã được thêm chưa
+    if (imageUpload.files.length > 0) {
+      // Xóa tệp đã chọn
+      imageUpload.value = '';
+      console.log('File đã bị xóa');
+    } else {
+      console.log('Không có file nào được chọn');
+    }
+
+
     if (image) image.remove()
     if (canvas) canvas.remove()
-    image = await faceapi.bufferToImage(imageUpload.files[0])
-    image.width = 480
-    image.height = 360
+    image = img_capture;
+
+    image.width = 720
+    image.height = 480
     container.append(image)
     canvas = faceapi.createCanvasFromMedia(image)
     container.append(canvas)
@@ -47,13 +64,89 @@ async function start() {
     const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
     console.log(results)
 
-    results.forEach((result, i) => {
+
+    for (const result of results) {
+      const i = results.indexOf(result);
       const box = resizedDetections[i].detection.box
-      const drawBox = new faceapi.draw.DrawBox(box, { label: result.toString() })
-      drawBox.draw(canvas)
-    })
+
+      // Gửi yêu cầu AJAX riêng biệt cho từng result
+      const userId = result.label;
+      try {
+        const response = await fetch('/getUserInfo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId })
+        });
+        const data = await response.json();
+        console.log(`Thông tin người dùng cho MSSV ${userId}:`, data);
+        const drawBox = new faceapi.draw.DrawBox(box, { label: data.name +  ", MSSV: " + result.toString()})
+        drawBox.draw(canvas)
+      } catch (error) {
+        console.error(`Lỗi khi lấy thông tin người dùng cho MSSV ${userId}:`, error);
+      }
+
+
+    }
+  })
+
+
+  imageUpload.addEventListener('change', async () => {
+    const img_capture = document.getElementById('img_capture')
+    if (img_capture)
+      img_capture.remove()
+    else
+      console.log("ko ton tai")
+
+    if (image) image.remove()
+    if (canvas) canvas.remove()
+    image = await faceapi.bufferToImage(imageUpload.files[0])
+
+    console.log(image);
+    image.width = 720
+    image.height = 480
+    container.append(image)
+    canvas = faceapi.createCanvasFromMedia(image)
+    container.append(canvas)
+    const displaySize = { width: image.width, height: image.height }
+    faceapi.matchDimensions(canvas, displaySize)
+    console.log('oke')
+
+
+    const detections = await faceapi.detectAllFaces(image).withFaceLandmarks().withFaceDescriptors()
+    const resizedDetections = faceapi.resizeResults(detections, displaySize)
+    const results = resizedDetections.map(d => faceMatcher.findBestMatch(d.descriptor))
+    console.log(results)
+
+
+    for (const result of results) {
+      const i = results.indexOf(result);
+      const box = resizedDetections[i].detection.box
+
+      // Gửi yêu cầu AJAX riêng biệt cho từng result
+      const userId = result.label;
+      try {
+        const response = await fetch('/getUserInfo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId })
+        });
+        const data = await response.json();
+        console.log(`Thông tin người dùng cho MSSV ${userId}:`, data);
+        const drawBox = new faceapi.draw.DrawBox(box, { label: data.name +  ", MSSV: " + result.toString() })
+        drawBox.draw(canvas)
+      } catch (error) {
+        console.error(`Lỗi khi lấy thông tin người dùng cho MSSV ${userId}:`, error);
+      }
+
+
+    }
   })
 }
+
 
 /*
 function loadLabeledImages() {
@@ -106,7 +199,7 @@ async function loadLabeledFaceDescriptorsFromFile1(file) {
 
     // Giả sử dữ liệu là một mảng các đối tượng có thuộc tính userId và descriptor
     const labeledFaceDescriptors = data.map(ld => new faceapi.LabeledFaceDescriptors(
-        "MSSV: " + ld.userId.toString(), // Chuyển đổi userId thành chuỗi để làm label
+        ld.userId.toString(), // Chuyển đổi userId thành chuỗi để làm label
         [new Float32Array(ld.descriptor)] // Đảm bảo descriptor là một mảng Float32Array
     ));
 

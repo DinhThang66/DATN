@@ -19,6 +19,7 @@ import org.example.project.service.dept.DeptService;
 import org.example.project.service.image.ImageService;
 import org.example.project.service.lecturer.LecturerService;
 import org.example.project.service.student.StudentService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -41,6 +42,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class AdminController {
@@ -731,6 +733,7 @@ public class AdminController {
         }
     }
      */
+
 
     // Func ===========================
     public static String convertToUsername(String name) {

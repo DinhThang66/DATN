@@ -26,8 +26,8 @@
     <script th:src="@{https://unpkg.com/@popperjs/core@2}"></script>
     <style>
         .video-container {
-            width: 320px;
-            height: 240px;
+            width: 640px;
+            height: 480px;
             border-radius: 8px;
             overflow: hidden;
         }
@@ -237,7 +237,6 @@
         <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0 mb-6">
             <div class="">
                 <input type="file" id="imageUpload" aria-describedby="inputGroupFileAddon04" aria-label="Upload"
-                       onchange="displayImage()"
                        class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
             </div>
         </div>
@@ -253,7 +252,7 @@
 
     <!-- Right half -->
     <div class="w-1/2 flex items-center justify-center bg-gray-100 p-4" id="rightHalf">
-        <canvas id="canvas" class="hidden" width="320px" height="240px"></canvas>
+        <canvas id="canvas" class="hidden" width="620px" height="480px"></canvas>
 
     </div>
 
@@ -302,13 +301,16 @@
 
             // Create an image element to display the captured photo
             const img = new Image();
-            img.height= 240;
-            img.width=320;
+            img.height= 480;
+            img.width= 640;
             img.src = canvas.toDataURL('image/png');
+            img.id = "img_capture"
+
 
             // Clear the rightHalf and append the new image
             rightHalf.innerHTML = '';
             rightHalf.appendChild(img);
+
         });
     </script>
 </div>
