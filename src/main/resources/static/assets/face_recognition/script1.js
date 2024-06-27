@@ -19,9 +19,24 @@ if ('serviceWorker' in navigator) {
 async function start() {
   const container = document.getElementById('rightHalf');
   container.style.position = 'relative'
-  labeledFaceDescriptors = await loadLabeledFaceDescriptorsFromFile1('/assets/face_recognition/data.json');
 
-  console.log({labeledFaceDescriptors})
+  let labeledFaceDescriptors;
+  try {
+    const response = await fetch('/getDescriptor', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    const data = await response.json();
+    labeledFaceDescriptors = data.map(ld => new faceapi.LabeledFaceDescriptors(
+        ld.userId.toString(), // Chuyển đổi userId thành chuỗi để làm label
+        [new Float32Array(ld.descriptor)] // Đảm bảo descriptor là một mảng Float32Array
+    ));
+    console.log({labeledFaceDescriptors})
+  } catch (error) {
+    console.error(`Lỗi khi lấy thông tin người dùng cho MSSV `, error);
+  }
 
   const faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6)
   let image = new Image()
@@ -121,6 +136,10 @@ async function start() {
 
 
     for (const result of results) {
+
+      if (result.label ==="unknown")
+        continue;
+
       const i = results.indexOf(result);
       const box = resizedDetections[i].detection.box
 
@@ -164,7 +183,7 @@ function loadLabeledImages() {
     })
   )
 }
- */
+
 
 async function loadLabeledFaceDescriptorsFromFile(file) {
   try {
@@ -210,3 +229,4 @@ async function loadLabeledFaceDescriptorsFromFile1(file) {
     return null; // Hoặc xử lý lỗi theo cách thích hợp trong ứng dụng của bạn
   }
 }
+ */
