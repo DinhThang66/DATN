@@ -38,5 +38,6 @@ public class CourseClass {
     private String room;
     private String schedule;
 
-
+    @OneToMany(mappedBy = "courseClass")
+    private Set<StudentAttendance> attendances;
 }

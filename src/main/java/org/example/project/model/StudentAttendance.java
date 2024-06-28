@@ -2,6 +2,7 @@ package org.example.project.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -10,35 +11,29 @@ import java.util.List;
 @Table(name = "studentAttendance")
 @Getter
 @Setter
+@NoArgsConstructor
 public class StudentAttendance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_attendance_students",
-            joinColumns = @JoinColumn(name = "attendance_id"),
-            inverseJoinColumns = @JoinColumn(name = "student_id")
-    )
-    private List<Student> students;
-    private String date;
-    private Boolean isAttended;
-
-
     @ManyToOne
-    @JoinColumn(name = "course_class_id")
+    @JoinColumn(name = "class_id")
     private CourseClass courseClass;
 
-    public StudentAttendance(Long id, List<Student> students, String date, Boolean isAttended, CourseClass courseClass) {
+    @ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
+
+    private Boolean isAttended;
+
+    private String date;
+
+    public StudentAttendance(Long id, CourseClass courseClass, Student student, Boolean isAttended, String date) {
         this.id = id;
-        this.students = students;
-        this.date = date;
-        this.isAttended = isAttended;
         this.courseClass = courseClass;
+        this.student = student;
+        this.isAttended = isAttended;
+        this.date = date;
     }
-
-    public StudentAttendance() {}
-
 }

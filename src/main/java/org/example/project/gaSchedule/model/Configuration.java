@@ -1,6 +1,7 @@
 package org.example.project.gaSchedule.model;
 
 import org.example.project.service.course.CourseService;
+import org.example.project.service.courseClass.CourseClassService;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -139,8 +140,23 @@ public class Configuration
 
 				long lecturer_id = rs.getLong("lecturer_id");
 				long course_id = rs.getLong("course_id");
+
+
+				String queryCount = "SELECT COUNT(*) FROM class_student WHERE class_id = ?";
+				int studentCount = 0;
+				try (PreparedStatement stmtCount = conn.prepareStatement(queryCount)) {
+					stmtCount.setLong(1, id);
+					try (ResultSet rsCount = stmtCount.executeQuery()) {
+						if (rsCount.next()) {
+							studentCount = rsCount.getInt(1);
+						}
+					}
+				}
+
+
+
 				List<StudentsGroup> groups = new ArrayList<>();
-				groups.add(new StudentsGroup(index++, "", 19));
+				groups.add(new StudentsGroup(index++, "", studentCount));
 				courseClasses.add(new CourseClass((int) id,_professors.get((int) lecturer_id), _courses.get((int) course_id), false, _courses.get((int) course_id).Duration, groups.toArray(new StudentsGroup[0])));
 			}
 		}

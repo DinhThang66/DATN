@@ -18,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class LecturerController {
@@ -46,16 +45,60 @@ public class LecturerController {
     @GetMapping("lecturer_page/schedule/detailClass_{id}")
     public String detailClass (Model model, @PathVariable("id") Long id,
                                Principal principal, HttpSession session) {
+
         List<Student> list = this.courseClassService.getStudentsByClassId(id);
-        model.addAttribute("list", list);
+        //model.addAttribute("list", list);
 
         CourseClass courseClass = this.courseClassService.findById(id);
         model.addAttribute("class", courseClass);
+
+        Set<StudentAttendance> studentAttendances = courseClass.getAttendances();
+        Set<String> dateSet = new HashSet<>(); // Sử dụng Set để lưu trữ các date duy nhất
+        for (StudentAttendance studentAttendance : studentAttendances){
+            String date = studentAttendance.getDate();
+            dateSet.add(date); // Thêm date vào Set
+        }
+        System.out.println(dateSet);
+
+
+        List<Map<String, Object>> studentInfoList = new ArrayList<>();
+        for (Student student : list) {
+            Map<String, Object> studentInfo = new HashMap<>();
+
+            studentInfo.put("studentName", student.getUser().getFullname());
+            studentInfo.put("studentId", student.getId());
+
+
+            List<Map<String, Object>> dateInfoList = new ArrayList<>();
+            int counter = 0;
+            for (String item:dateSet){
+                Map<String, Object> dateInfo = new HashMap<>();
+                for (StudentAttendance studentAttendance:studentAttendances){
+                    if (Objects.equals(item, studentAttendance.getDate())
+                            &&(Objects.equals(student.getId(), studentAttendance.getStudent().getId()))){
+                        dateInfo.put(item, studentAttendance.getIsAttended());
+                        if (!studentAttendance.getIsAttended()){
+                            counter++;
+                        }
+                    }
+                }
+                dateInfoList.add(dateInfo);
+            }
+            studentInfo.put("date", dateInfoList);
+            studentInfo.put("absent", counter);
+
+            studentInfoList.add(studentInfo);
+        }
+        System.out.println(studentInfoList);
+        model.addAttribute("list", studentInfoList);
+
 
         //++++
         UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
         User user = this.userService.findByUserName(userDetails.getUsername());
         model.addAttribute("userParam", user);
+
+
 
         return "lecturer_pages/detailClass";
     }
@@ -72,6 +115,8 @@ public class LecturerController {
 
 
 
+
+
     @GetMapping("/")
     public String index(Model model) {
         String x = "dinh van thang";
@@ -84,33 +129,9 @@ public class LecturerController {
     private ImageService imageService;
     @GetMapping("/admin_page/test")
     public String index1(Model model) {
-        List<Image> list = this.imageService.getAll();
-        List<UploadRequest> userDescriptors = new ArrayList<>();
 
-
-        for(Image image : list){
-            Long label = image.getId();
-            List<Float> description = image.getDescription();
-            if (!description.isEmpty())
-                userDescriptors.add(new UploadRequest(description, label));
-        }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File("src/main/resources/static/assets/face_recognition/data.json"), userDescriptors);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
         return "admin_pages/index1";
     }
-
-    @GetMapping("/admin_page/had")
-    public String index2(Model model) {
-
-        return "admin_pages/test";
-    }
-
-
 }

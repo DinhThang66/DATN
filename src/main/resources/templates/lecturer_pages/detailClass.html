@@ -84,7 +84,8 @@
                         Thời khóa biểu
                     </li>
                 </ol>
-                <h6 class="mb-0 font-bold text-white capitalize" th:text="'Lớp:'+' '+ ${class.course.name}+' - [id: '+ ${class.id}+']'"></h6>
+                <h6 class="mb-0 font-bold text-white capitalize"
+                    th:text="'Lớp:'+' '+ ${class.course.name}+' - [id: '+ ${class.id}+']'"></h6>
             </nav>
 
             <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()}, param3=${userParam.getId()})"></div>
@@ -123,6 +124,14 @@
                                     <th class="px-6 py-3 w-50  font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-nowrap text-slate-400 opacity-70">
                                         Họ và tên
                                     </th>
+                                    <!-- Thay thế phần này để lặp qua các entry trong dateInfo -->
+                                    <th th:each="dateInfo :${list.get(0).date}"
+                                        class="px-6 py-3 w-75 pl-2 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal text-slate-400 opacity-70">
+                                        <div th:each="entry : ${dateInfo}">
+                                            <div th:text="${entry.key}">
+                                        </div>
+                                    </th>
+
                                     <th class="px-6 py-3 w-75 pl-2 w-50 font-bold text-left uppercase align-middle bg-transparent border-b border-collapse shadow-none dark:border-white/40 dark:text-white text-xxs border-b-solid tracking-none whitespace-normal text-slate-400 opacity-70">
                                         Số lần vắng
                                     </th>
@@ -130,8 +139,9 @@
                                 </thead>
                                 <tbody>
 
+                                <div th:text="${class.id}" class="hidden" id="classId"></div>
 
-                                <tr th:each="student : ${list}"
+                                <tr th:each="item : ${list}" th:data-id="${item.studentId}"
                                     class="dark:text-white dark:opacity-80 whitespace-nowrap rounded-lg px-4 transition-colors hover:bg-blue-200 hover:text-slate-700">
                                     <td class="px-6 py-3 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
 
@@ -144,26 +154,29 @@
                                         <div class="flex px-2 py-1">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal dark:text-white"
-                                                    th:text="${student.user.fullname}"></h6>
+                                                    th:text="${item.studentName}"></h6>
                                             </div>
                                         </div>
                                     </td>
-
-
-                                    <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
-
+                                    <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent"
+                                        th:each="dateInfo : ${item.date}">
+                                            <div th:each="entry : ${dateInfo}">
+                                                <input type="checkbox" th:checked="${entry.value}" disabled>
+                                            </div>
                                     </td>
 
 
+                                    <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent"
+                                        th:text="${item.absent}">
+
+                                    </td>
                                 </tr>
-
-
-
                                 </tbody>
                             </table>
 
                         </div>
                     </div>
+
                     <div class="hidden px-6 py-2 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between"
                          id="submitContainer">
                         <h6 class="dark:text-white"></h6>
@@ -186,7 +199,7 @@
     <!-- end cards -->
 </main>
 <script>
-    document.getElementById('diemDanhButton').addEventListener('click', function() {
+    document.getElementById('diemDanhButton').addEventListener('click', function () {
         var table = document.getElementById('studentTable');
         var header = table.querySelector('thead tr');
         var rows = table.querySelectorAll('tbody tr');
@@ -194,13 +207,15 @@
         // Tạo tiêu đề cột mới
         var newHeader = document.createElement('th');
         newHeader.classList.add('px-6', 'py-3', 'font-bold', 'text-left', 'uppercase', 'align-middle', 'bg-transparent', 'border-b', 'border-collapse', 'shadow-none', 'dark:border-white/40', 'dark:text-white', 'text-xxs', 'border-b-solid', 'tracking-none', 'whitespace-nowrap', 'text-slate-400', 'opacity-70');
+        newHeader.id = 'attendanceHeader'; // Set the id attribute here
+
         var now = new Date();
         // Định dạng ngày tháng và thời gian
         var formattedDateTime = now.getFullYear() + '-' +
             String(now.getMonth() + 1).padStart(2, '0') + '-' +
-            String(now.getDate()).padStart(2, '0') + '\n' +
+            String(now.getDate()).padStart(2, '0') + '\n-' +
             String(now.getHours()).padStart(2, '0') + ':' +
-            String(now.getMinutes()).padStart(2, '0')   ;
+            String(now.getMinutes()).padStart(2, '0');
 
         newHeader.innerText = formattedDateTime;
 
@@ -208,7 +223,7 @@
         header.insertBefore(newHeader, header.children[2]);
 
         // Thêm checkbox vào mỗi hàng sau cột "Họ và tên"
-        rows.forEach(function(row) {
+        rows.forEach(function (row) {
             var newCell = document.createElement('td');
             newCell.classList.add('px-6', 'py-3', 'align-middle', 'bg-transparent', 'border-b', 'dark:border-white/40', 'whitespace-nowrap', 'shadow-transparent');
             var checkBox = document.createElement('input');
@@ -228,6 +243,50 @@
             submitContainer.classList.remove('hidden');
         }
     });
+
+    document.querySelector('#submitContainer button').addEventListener('click', function () {
+        var rows = document.querySelectorAll('#studentTable tbody tr');
+        var attendanceData = [];
+
+        rows.forEach(function (row) {
+            var studentId = row.getAttribute('data-id');
+            var checkBox = row.querySelector('input[type="checkbox"]');
+            attendanceData.push({
+                id: studentId,
+                attended: checkBox.checked
+            });
+        });
+
+        var classId = document.getElementById('classId').textContent;
+        var date = document.getElementById('attendanceHeader').textContent;
+        console.log(date);
+
+        // Send the data via AJAX
+        fetch('/submit_attendance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                classId: classId,
+                date: date,
+                attendance: attendanceData
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                location.reload();
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                location.reload();
+
+            });
+    });
+
+
 </script>
 
 

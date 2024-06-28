@@ -1,12 +1,14 @@
 package org.example.project.controller;
 
 import lombok.extern.java.Log;
-import org.example.project.model.Image;
-import org.example.project.model.UploadRequest;
-import org.example.project.model.User;
+import org.example.project.model.*;
 import org.example.project.service.UserService;
+import org.example.project.service.courseClass.CourseClassService;
 import org.example.project.service.image.ImageService;
+import org.example.project.service.student.StudentService;
+import org.example.project.service.studentAttendance.StudentAttendanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 public class DataController {
@@ -28,6 +27,10 @@ public class DataController {
     private UserService userService;
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private CourseClassService courseClassService;
+    @Autowired
+    private StudentAttendanceService studentAttendanceService;
 
     @PostMapping("/saveLabeledImages")
     public String saveLabeledImages(@RequestBody String json) {
@@ -69,5 +72,28 @@ public class DataController {
 
 
         return descriptors;
+    }
+
+    @PostMapping("/submit_attendance")
+    public ResponseEntity<String> submit_attendance(@RequestBody Map<String, Object> request) {
+        Long classId = Long.valueOf(request.get("classId").toString());
+        CourseClass courseClass = this.courseClassService.findById(classId);
+        Set<StudentAttendance> studentAttendances = courseClass.getAttendances();
+        // Lấy danh sách attendance từ request
+        List<Map<String, Object>> attendanceList = (List<Map<String, Object>>) request.get("attendance");
+        String date = (String) request.get("date");
+        System.out.println("Descriptor: " + date);
+
+        for (Map<String, Object> attendance : attendanceList) {
+            Long studentId = Long.valueOf(attendance.get("id").toString());
+            Student student = this.userService.findById(studentId).getStudent();
+            Boolean attended = (Boolean) attendance.get("attended");
+
+            StudentAttendance studentAttendance = new StudentAttendance(null, courseClass,student,attended,date);
+            if (this.studentAttendanceService.update(studentAttendance)){}
+
+        }
+
+        return ResponseEntity.ok("Attendance submitted successfully!");
     }
 }
