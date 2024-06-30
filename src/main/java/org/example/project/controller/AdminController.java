@@ -16,6 +16,7 @@ import org.example.project.service.UserService;
 import org.example.project.service.courseClass.CourseClassService;
 import org.example.project.service.course.CourseService;
 import org.example.project.service.dept.DeptService;
+import org.example.project.service.examClass.ExamClassService;
 import org.example.project.service.image.ImageService;
 import org.example.project.service.lecturer.LecturerService;
 import org.example.project.service.student.StudentService;
@@ -568,12 +569,16 @@ public class AdminController {
         return "admin_pages/manage/class_management";
     }
 
+    @Autowired
+    private ExamClassService examClassService;
     @PostMapping("/add_class")
     public String save_class(@ModelAttribute("class") CourseClass _Course_class, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
         if (this.courseClassService.create(_Course_class)) {
-            return "redirect:" + referer;
+            ExamClass examClass = new ExamClass(_Course_class);
+            this.examClassService.update(examClass);
 
+            return "redirect:" + referer;
         }
         return "redirect:/class_management";
     }
@@ -735,6 +740,57 @@ public class AdminController {
      */
 
     // Exam class
+
+    @GetMapping("admin_page/examClass_management")
+    public String examClass_management (Model model, Principal principal, HttpSession session, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        User user = this.userService.findByUserName(userDetails.getUsername());
+        model.addAttribute("userParam", user);
+
+        List<Department> list1 = this.deptService.getAll();
+        model.addAttribute("list1", list1);
+
+
+        Page<CourseClass> list = this.courseClassService.getAll(pageNo);
+        model.addAttribute("list", list);
+        model.addAttribute("totalPage", list.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
+
+        return "admin_pages/manage/examClass_management";
+    }
+
+    @GetMapping("admin_page/examClass_management/edit_examClass={id}")
+    public String edit_examClass(Model model, @PathVariable Long id, HttpServletRequest request, Principal principal) {
+        // Lưu URL của trang trước đó vào session
+        String referer = request.getHeader("Referer");
+        request.getSession().setAttribute("previousPage_examClass", referer);
+
+        //=====
+        UserDetails userDetails = userDetailsService.loadUserByUsername(principal.getName());
+        User user = this.userService.findByUserName(userDetails.getUsername());
+        model.addAttribute("userParam", user);
+
+
+        CourseClass _Course_class = this.courseClassService.findById(id);
+
+        ExamClass examClass = this.examClassService.findById(_Course_class.getExamClass().getId());
+        model.addAttribute("examClass", examClass);
+
+        Set<Student> students = _Course_class.getStudents();
+        model.addAttribute("list4", students);
+
+
+        return "admin_pages/edit_manage/edit_examClass";
+    }
+
+    @PostMapping("/edit_examClass")
+    public String update_examClass(@ModelAttribute("examClass") ExamClass examClass, HttpServletRequest request) {
+        this.examClassService.update(examClass);
+        HttpSession session = request.getSession();
+        String previousPage = (String) session.getAttribute("previousPage_examClass");
+        return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/examClass_management");
+    }
+
 
 
     // Func ===========================

@@ -40,4 +40,8 @@ public class CourseClass {
 
     @OneToMany(mappedBy = "courseClass")
     private Set<StudentAttendance> attendances;
+
+    @OneToOne(mappedBy = "courseClass", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private ExamClass examClass;
 }
