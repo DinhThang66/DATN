@@ -37,9 +37,9 @@
 
             <!---->
             <li class="mt-0.5 w-full">
-                <div x-data="{ open: true }">
+                <div x-data="{ open: false }">
                     <a @click="open = !open"
-                       class="bg-blue-500/13 font-semibold text-slate-800 py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 transition-colors hover:bg-blue-200 hover:text-slate-700">
+                       class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 transition-colors hover:bg-blue-200 hover:text-slate-700">
                         <div class="icon-container mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <i class="relative top-0 text-sm leading-normal text-blue-500 ni ni-tv-2"></i>
                         </div>
@@ -83,7 +83,7 @@
                         </div>
                         <div class="w-full">
 
-                            <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap rounded-lg bg-transparent pr-4 font-semibold text-slate-800 shadow-none transition-colors  dark:text-white dark:opacity-100 "
+                            <a class="ease-in-out py-2.7 ml-5.4 pl-4 leading-default text-sm relative my-0 mr-2 flex items-center whitespace-nowrap bg-transparent pr-4 font-medium text-slate-800/50 shadow-none transition-colors  dark:text-white dark:opacity-60 "
                                href="/admin_page/course_management">
 
                                 <span class="w-0 text-center transition-all duration-200 ease-in-out opacity-0 pointer-events-none"> D </span>
@@ -108,12 +108,12 @@
             </li>
 
             <li class="mt-0.5 w-full">
-                <a class=" dark:text-white dark:opacity-80 py-2.7 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap px-4 transition-colors"
-                   href="./pages/billing.html">
+                <a class="py-2.7 dark:text-white dark:opacity-80 text-sm ease-nav-brand my-0 mx-2 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold text-slate-700 transition-colors hover:bg-blue-200 hover:text-slate-700"
+                   href="/admin_page/examClass_management">
                     <div class="mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center fill-current stroke-0 text-center xl:p-2.5">
                         <i class="relative top-0 text-sm leading-normal text-emerald-500 ni ni-credit-card"></i>
                     </div>
-                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">NCHK</span>
+                    <span class="ml-1 duration-300 opacity-100 pointer-events-none ease">Quản lý lớp thi</span>
                 </a>
             </li>
 
@@ -150,10 +150,10 @@
                     </li>
                     <li class="text-sm pl-2 capitalize leading-normal text-white before:float-left before:pr-2 before:text-white before:content-['/']"
                         aria-current="page">
-                        Dữ liệu
+                        Quản lý lớp thi
                     </li>
                 </ol>
-                <h6 class="mb-0 font-bold text-white capitalize">Học Phần</h6>
+                <h6 class="mb-0 font-bold text-white capitalize">Chỉnh sửa lớp thi</h6>
             </nav>
 
             <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()}, param3=${userParam.getId()})"></div>
@@ -225,7 +225,7 @@
                     </form>
                     <div class="px-6 pb-0 mb-0 border-b-0 border-b-solid rounded-t-2xl border-b-transparent flex items-center justify-between">
                         <h6 class="dark:text-white">Danh sách sinh viên trong lớp</h6>
-                        <a type="button" href=""
+                        <a type="button" th:href="@{/admin_page/examClass_management/attendance={id}(id=${examClass.id})}"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
                             Điểm danh
                         </a>
@@ -267,31 +267,32 @@
                                         <div class="flex px-2 py-1">
                                             <div class="flex flex-col justify-center">
                                                 <h6 class="mb-0 text-sm leading-normal dark:text-white"
-                                                    th:text="${list.user.id}"></h6>
+                                                    th:text="${list.student.id}"></h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            th:text="${list.user.fullname}"></h6>
+                                            th:text="${list.student.user.fullname}"></h6>
 
                                     </td>
 
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            th:text="${list.className}"></h6>
-                                    </td>
-
-
-                                    <td class="p-2 pr-6  align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
-                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                            th:text="${list.educationProgram}"></h6>
+                                            th:text="${list.student.className}"></h6>
                                     </td>
 
                                     <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
                                         <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
-                                        ></h6>
+                                            th:text="${list.student.educationProgram}"></h6>
                                     </td>
+                                    <td class="p-2 pr-6 align-middle bg-transparent border-b dark:border-white/40 whitespace-nowrap shadow-transparent">
+                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
+                                            th:if="${list.state}">Đã điểm danh</h6>
+                                        <h6 class="mb-0 text-xs font-bold leading-tight dark:text-white dark:opacity-80"
+                                            th:unless="${list.state}">Chưa điểm danh</h6>
+                                    </td>
+
 
                                 </tr>
 

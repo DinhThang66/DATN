@@ -20,6 +20,7 @@ import org.example.project.service.examClass.ExamClassService;
 import org.example.project.service.image.ImageService;
 import org.example.project.service.lecturer.LecturerService;
 import org.example.project.service.student.StudentService;
+import org.example.project.service.studentAttendanceExam.StudentAttendanceExamService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -772,12 +773,29 @@ public class AdminController {
 
 
         CourseClass _Course_class = this.courseClassService.findById(id);
+        List<StudentAttendanceExam> attendanceExamList = this.studentAttendanceExamService.findAllByExamCLassId(_Course_class.getExamClass().getId());
 
         ExamClass examClass = this.examClassService.findById(_Course_class.getExamClass().getId());
         model.addAttribute("examClass", examClass);
 
         Set<Student> students = _Course_class.getStudents();
-        model.addAttribute("list4", students);
+
+        List<Map<String, Object>> studentInfoList = new ArrayList<>();
+        for (Student student:students){
+            Map<String, Object> studentInfo = new HashMap<>();
+            studentInfo.put("student", student);
+            int count = 0;
+            for (StudentAttendanceExam item: attendanceExamList){
+                if (item.getStudent().getId() == student.getId()){
+                    studentInfo.put("state", item.getIsAttended());
+                    count++;
+                }
+            }
+            if (count==0)
+                studentInfo.put("state", false);
+            studentInfoList.add(studentInfo);
+        }
+        model.addAttribute("list4", studentInfoList);
 
 
         return "admin_pages/edit_manage/edit_examClass";
@@ -791,6 +809,29 @@ public class AdminController {
         return "redirect:" + (previousPage != null ? previousPage : "admin_pages/manage/examClass_management");
     }
 
+    @Autowired
+    private StudentAttendanceExamService studentAttendanceExamService;
+    @GetMapping("admin_page/examClass_management/attendance={id}")
+    public String attendance(Model model, @PathVariable Long id, HttpServletRequest request, Principal principal) {
+        ExamClass examClass = this.examClassService.findById(id);
+        model.addAttribute("examClass", examClass);
+
+        List<StudentAttendanceExam> attendanceExamList = this.studentAttendanceExamService.findAllByExamCLassId(id);
+
+        Set<Student> students = examClass.getCourseClass().getStudents();
+        for (Student student: students){
+            boolean isExist = false;
+            for (StudentAttendanceExam item: attendanceExamList){
+                if (item.getStudent().getId() == student.getId()){
+                    isExist = true;
+                }
+            }
+            if (!isExist)
+                if (this.studentAttendanceExamService.update(new StudentAttendanceExam(null, examClass, student, false))) {}
+        }
+
+        return "admin_pages/attendance";
+    }
 
 
     // Func ===========================

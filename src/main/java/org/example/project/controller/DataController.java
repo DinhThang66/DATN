@@ -4,15 +4,14 @@ import lombok.extern.java.Log;
 import org.example.project.model.*;
 import org.example.project.service.UserService;
 import org.example.project.service.courseClass.CourseClassService;
+import org.example.project.service.examClass.ExamClassService;
 import org.example.project.service.image.ImageService;
 import org.example.project.service.student.StudentService;
 import org.example.project.service.studentAttendance.StudentAttendanceService;
+import org.example.project.service.studentAttendanceExam.StudentAttendanceExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -31,6 +30,10 @@ public class DataController {
     private CourseClassService courseClassService;
     @Autowired
     private StudentAttendanceService studentAttendanceService;
+    @Autowired
+    private ExamClassService examClassService;
+    @Autowired
+    private StudentAttendanceExamService studentAttendanceExamService;
 
     @PostMapping("/saveLabeledImages")
     public String saveLabeledImages(@RequestBody String json) {
@@ -95,5 +98,30 @@ public class DataController {
         }
 
         return ResponseEntity.ok("Attendance submitted successfully!");
+    }
+
+
+    @PostMapping("/getUserInfo_attendance={id}")
+    public Map<String, String> getUserInfoAttendance(@RequestBody Map<String, String> payload,  @PathVariable Long id) {
+        String userId = payload.get("userId");
+        User user = this.userService.findById(Long.parseLong(userId));
+
+        Map<String, String> userInfo = new HashMap<>();
+        userInfo.put("ID", user.getId().toString());
+        userInfo.put("name", user.getFullname());
+        userInfo.put("email", user.getEmail());
+
+        ExamClass examClass = this.examClassService.findById(id);
+
+        List<StudentAttendanceExam> attendanceExamList = this.studentAttendanceExamService.findAllByExamCLassId(id);
+
+        for (StudentAttendanceExam item: attendanceExamList){
+            if (item.getStudent().getId() == user.getId()){
+                item.setIsAttended(true);
+                if (this.studentAttendanceExamService.update(item)) {}
+            }
+        }
+
+        return userInfo;
     }
 }
