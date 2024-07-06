@@ -116,9 +116,9 @@ public class DataController {
         List<StudentAttendanceExam> attendanceExamList = this.studentAttendanceExamService.findAllByExamCLassId(id);
 
         for (StudentAttendanceExam item: attendanceExamList){
-            if (item.getStudent().getId() == user.getId()){
+            if (Objects.equals(item.getStudent().getId(), user.getId())){
                 item.setIsAttended(true);
-                if (this.studentAttendanceExamService.update(item)) {}
+                if (this.studentAttendanceExamService.update(item)) { break;}
             }
         }
 

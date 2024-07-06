@@ -786,7 +786,7 @@ public class AdminController {
             studentInfo.put("student", student);
             int count = 0;
             for (StudentAttendanceExam item: attendanceExamList){
-                if (item.getStudent().getId() == student.getId()){
+                if (Objects.equals(item.getStudent().getId(), student.getId())){
                     studentInfo.put("state", item.getIsAttended());
                     count++;
                 }
@@ -822,7 +822,7 @@ public class AdminController {
         for (Student student: students){
             boolean isExist = false;
             for (StudentAttendanceExam item: attendanceExamList){
-                if (item.getStudent().getId() == student.getId()){
+                if (Objects.equals(item.getStudent().getId(), student.getId())){
                     isExist = true;
                 }
             }
