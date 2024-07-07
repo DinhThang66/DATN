@@ -1,1 +1,1 @@
-- Ứng dụng
+- Ứng dụng spring boot; thay đổi datasource.url, datasource.usename, datasource.password
