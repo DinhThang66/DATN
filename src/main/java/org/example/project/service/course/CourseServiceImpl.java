@@ -82,8 +82,8 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
-    public Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo) {
-        List<Course> list = this.searchCourseByName(keywordName);
+    public Page<Course> getAll(String keywordId, String keywordName, Integer pageNo) {
+        List<Course> list = this.searchCourse( keywordName, keywordId);
 
         Pageable pageable = PageRequest.of(pageNo - 1, 8);
 
@@ -92,6 +92,30 @@ public class CourseServiceImpl implements CourseService{
 
         list = list.subList(start, end);
         return new PageImpl<Course>(list, pageable, this.searchCourseByName(keywordName).size());
+    }
+
+    @Override
+    public Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo) {
+        //List<Course> list = this.searchCourseByName(keywordName);
+        List<Course> list = this.searchCourse(keywordDeptId, keywordName, keywordId);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<Course>(list, pageable, this.searchCourseByName(keywordName).size());
+    }
+
+    @Override
+    public List<Course> searchCourse(Long keyword, String courseName, String courseId) {
+        return this.courseRepository.searchCourse(keyword,courseName, courseId);
+    }
+
+    @Override
+    public List<Course> searchCourse(String courseName, String courseId) {
+        return this.courseRepository.searchCourse(courseName, courseId);
     }
 
     @Override

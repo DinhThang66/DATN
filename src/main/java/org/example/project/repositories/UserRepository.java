@@ -33,8 +33,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	//@Query("select u from User u where u.role='student' and u.department.id = ?1 and u.id = ?2")
 	//List<User> getStudent(Long id, Long userId, String fullName);
-	@Query("SELECT u FROM User u WHERE u.role = 'student' AND u.department.id = :departmentId AND u.id = :userId AND u.fullname LIKE %:fullName%")
-	List<User> getStudent(@Param("departmentId") Long departmentId, @Param("userId") Long userId, @Param("fullName") String fullName);
+	//@Query("SELECT u FROM User u WHERE u.role = 'student' AND u.department.id = :departmentId AND u.id = :userId AND u.fullname LIKE %:fullName%")
+	//List<User> getStudent(@Param("departmentId") Long departmentId, @Param("userId") Long userId, @Param("fullName") String fullName);
+
+	@Query("SELECT u FROM User u WHERE u.role = 'student' and u.department.id=?1 and (u.fullname like %?2% or u.id=?3)")
+	List<User> getStudent(Long id, String fullName, Long userId);
 
 
 	@Query("select COUNT(*) from User u where u.role = 'student'")

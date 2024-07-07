@@ -38,6 +38,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.Principal;
 import java.sql.Array;
 import java.sql.Blob;
@@ -138,11 +140,21 @@ public class AdminController {
     public String course_management(Model model, @Param("keyword_id") String keyword_id, @Param("keyword_name") String keyword_name,
                                     @Param("keyword_dept") Long keyword_dept,
                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Principal principal) {
+
         Page<Course> list = this.courseService.getAll(pageNo);
-        if (keyword_name != null) {
-            list = this.courseService.searchDept(keyword_dept, keyword_id, keyword_name, pageNo);
-            model.addAttribute("keyword_name", keyword_name);
+        if (keyword_name!= null || keyword_id != null)
+            list = this.courseService.getAll(keyword_name, keyword_id,pageNo);
+        if (keyword_dept != null) {
+            if (keyword_dept != 0){
+                list = this.courseService.searchDept(keyword_dept, keyword_id, keyword_name, pageNo);
+            }
         }
+
+        model.addAttribute("keyword_dept", keyword_dept);
+        model.addAttribute("keyword_id", keyword_id);
+        model.addAttribute("keyword_name", keyword_name);
+
+
 
         model.addAttribute("list", list);
         model.addAttribute("totalPage", list.getTotalPages());
@@ -251,7 +263,7 @@ public class AdminController {
                                @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Principal principal) {
         Page<User> list = this.userService.getAllByStudentInDept(id, pageNo);
 
-        if (keyword_id != null || (keyword_name != null && keyword_name.isEmpty())) {
+        if (keyword_id != null || keyword_name != null ) {
             list = this.userService.getStudent(id, keyword_id, keyword_name, pageNo);
         }
 
@@ -677,7 +689,8 @@ public class AdminController {
         }
 
 
-        String tempFilePath = System.getProperty("java.io.tmpdir") + "GaSchedule.htm";
+        //String tempFilePath = System.getProperty("java.io.tmpdir") + "GaSchedule.htm";
+        String tempFilePath =  "src/main/resources/templates/GaSchedule.html";
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tempFilePath)))) {
             writer.write(htmlResult);
             writer.flush();
@@ -693,10 +706,19 @@ public class AdminController {
             Desktop.getDesktop().open(new File(tempFilePath));
         } catch (Exception ex) {
             // no application registered for html
+            System.out.println(String.format("no save"));
+
         }
+
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
+    }
+
+    @GetMapping("/show_schedule")
+    public String show_schedule() {
+
+        return "GaSchedule";
     }
 
     @PostMapping("/upload")

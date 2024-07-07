@@ -139,12 +139,12 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getStudent(Long id, Long userId, String fullName) {
-		return this.userRepository.getStudent(id, userId, fullName);
+		return this.userRepository.getStudent(id, fullName, userId);
 	}
 
 	@Override
 	public Page<User> getStudent(Long id, Long userId, String fullName, Integer pageNo) {
-		List<User> list = this.searchStudentByName(fullName);
+		List<User> list = this.getStudent(id, userId, fullName);
 		//List<User> list = this.find(id, userId, fullName);
 
 

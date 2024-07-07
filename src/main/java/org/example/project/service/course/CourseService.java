@@ -16,7 +16,11 @@ public interface CourseService {
     List<Course> searchCourseByName(String keyword);
     List<Course> searchCourseByDept(Long keyword);
     Page<Course> getAll(Integer pageNo);
+    Page<Course> getAll(String  keywordId, String keywordName, Integer pageNo);
     Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo);
+
+    List<Course> searchCourse(Long keyword, String courseName, String courseId);
+    List<Course> searchCourse(String courseName, String courseId);
 
     Integer numberOfCourses();
 }
