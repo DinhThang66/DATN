@@ -4,6 +4,6 @@
 
 - Để sử dụng chức năng điểm danh khuôn mặt cần thêm ảnh từ edit_student và chờ một lúc để có thể trích suất đặc trưng của người đó.
 - Phần xếp lịch mặc định có 3 phòng học, để thêm phòng học thay đổi trong gaSchedule/model/Configuration.java trong hàm loadRooms().
-- 
+  
 - Lưu ý: Để thêm descriptor các điểm đặc trưng của khuôn mặt của một người dùng thì cần phải input ảnh trong edit_student(Vì chỉ check ảnh sinh viên),
   do việc tính toán description mất khá nhiều thời gian, nên tạo mới sinh viên mà thêm ảnh thì chưa tính description luôn.
