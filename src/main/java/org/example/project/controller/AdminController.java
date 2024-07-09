@@ -318,7 +318,6 @@ public class AdminController {
                 }
             }
 
-
             if (this.studentService.update(student))
                 if (referer != null) {
                     // Chuyển hướng đến URL trước đó
