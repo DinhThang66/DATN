@@ -88,7 +88,7 @@
                     th:text="'Lớp:'+' '+ ${class.course.name}+' - [id: '+ ${class.id}+']'"></h6>
             </nav>
 
-            <div th:replace="fragments/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()}, param3=${userParam.getId()})"></div>
+            <div th:replace="lecturer_pages/navbar :: navbar(param1=${userParam.getFullname()}, param2=${userParam.getEmail()}, param3=${userParam.getId()})"></div>
 
         </div>
     </nav>
