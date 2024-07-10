@@ -142,12 +142,11 @@ public class AdminController {
                                     @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Principal principal) {
 
         Page<Course> list = this.courseService.getAll(pageNo);
-        if (keyword_name!= null || keyword_id != null)
-            list = this.courseService.getAll(keyword_name, keyword_id,pageNo);
-        if (keyword_dept != null) {
-            if (keyword_dept != 0){
-                list = this.courseService.searchDept(keyword_dept, keyword_id, keyword_name, pageNo);
-            }
+        if (keyword_dept != null && keyword_dept != 0)
+            list = this.courseService.searchCourseByDept(keyword_dept, pageNo);
+
+        if (keyword_name!= null && !keyword_name.isEmpty()){
+            list = this.courseService.searchCourseByName(keyword_name,pageNo);
         }
 
         model.addAttribute("keyword_dept", keyword_dept);
@@ -263,8 +262,9 @@ public class AdminController {
                                @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Principal principal) {
         Page<User> list = this.userService.getAllByStudentInDept(id, pageNo);
 
-        if (keyword_id != null || keyword_name != null ) {
+        if (keyword_name != null && !keyword_name.isEmpty()) {
             list = this.userService.getStudent(id, keyword_id, keyword_name, pageNo);
+            model.addAttribute("totalPage", list.getTotalPages());
         }
 
         model.addAttribute("list", list);
@@ -279,6 +279,8 @@ public class AdminController {
 
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
+        model.addAttribute("DeptID", id);
+        model.addAttribute("keyword_name", keyword_name);
 
         Department department = this.deptService.findById(id);
         model.addAttribute("nameDept", department.getName());
@@ -423,10 +425,15 @@ public class AdminController {
 
     @GetMapping("admin_page/lecturer_management/list_lecturer_{id}")
     public String list_lecturer(Model model, @PathVariable("id") Long id,
+                                @Param("keyword_name") String keyword_name,
                                 @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Principal principal) {
 
         //List<User> list = this.userService.findAllByLecturerInDept(id);
         Page<User> list = this.userService.getAllByLecturerInDept(id, pageNo);
+        if (keyword_name != null && !keyword_name.isEmpty()) {
+            list = this.userService.getLecturer(id, keyword_name, pageNo);
+        }
+
         model.addAttribute("list", list);
         model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currentPage", pageNo);
@@ -437,8 +444,11 @@ public class AdminController {
         Lecturer lecturer = new Lecturer();
         model.addAttribute("lecturer", lecturer);
 
+        model.addAttribute("keyword_name", keyword_name);
         List<Department> list1 = this.deptService.getAll();
         model.addAttribute("list1", list1);
+        model.addAttribute("DeptID", id);
+
 
         Department department = this.deptService.findById(id);
         model.addAttribute("nameDept", department.getName());

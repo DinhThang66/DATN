@@ -13,8 +13,13 @@ public interface CourseService {
     Boolean update(Course course);
     Boolean delete(Long id);
     List<Course> searchCourseById(String keyword);
+
     List<Course> searchCourseByName(String keyword);
+    Page<Course> searchCourseByName(String keyword, Integer pageNo);
+
     List<Course> searchCourseByDept(Long keyword);
+    Page<Course> searchCourseByDept(Long keyword, Integer pageNo);
+
     Page<Course> getAll(Integer pageNo);
     Page<Course> getAll(String  keywordId, String keywordName, Integer pageNo);
     Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo);

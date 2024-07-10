@@ -158,7 +158,6 @@
     </nav>
 
 
-
     <!-- cards -->
     <div class="w-full px-6 py-6 mx-auto">
         <div class="flex flex-wrap -mx-3">
@@ -176,13 +175,16 @@
 
 
                     <form class="flex flex-wrap">
+                        <!--
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <input type="text" placeholder="Tìm mã sinh viên" name="keyword_id"
                                    class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
                         </div>
+                        -->
+
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <!-- Nội dung cột 2 -->
-                            <input type="text" placeholder="Tìm tên sinh viên" name="keyword_name"
+                            <input type="text" placeholder="Tìm tên sinh viên" name="keyword_name" th:value="${keyword_name}"
                                    class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
                         </div>
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
@@ -254,14 +256,16 @@
 
                                     <td class="p-2 align-middle bg-transparent border-b dark:border-white/40 whitespace-normal shadow-transparent">
                                         <div class="flex">
-                                            <a type="button" th:href="@{/admin_page/student_management/edit_studentId={id}(id=${user.id})}"
-                                                    class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
+                                            <a type="button"
+                                               th:href="@{/admin_page/student_management/edit_studentId={id}(id=${user.id})}"
+                                               class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md">
                                                 <img th:src="@{/assets/img/ic/ic_edit.svg}" class="w-4 h-4" alt="Icon">
                                             </a>
                                             <a type="button" th:href="@{/delete_student_{id}(id=${user.id})}"
-                                                    class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
-                                                    onclick="return confirm('Bạn có chắc chắn xóa sinh viên này không?')">
-                                                <img th:src="@{/assets/img/ic/ic_delete.svg}" class="w-4 h-4" alt="Icon">
+                                               class="ml-1 px-1 py-1 bg-blue-500 rounded-1.4 hover:-translate-y-px active:opacity-85 hover:shadow-md"
+                                               onclick="return confirm('Bạn có chắc chắn xóa sinh viên này không?')">
+                                                <img th:src="@{/assets/img/ic/ic_delete.svg}" class="w-4 h-4"
+                                                     alt="Icon">
                                             </a>
                                         </div>
                                     </td>
@@ -280,7 +284,7 @@
                                 <ul class="flex items-center -space-x-px h-8 text-sm">
                                     <li>
                                         <a th:if="${currentPage} > 1"
-                                           th:href="@{'?pageNo=' + ${currentPage - 1}}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${currentPage - 1}}"
                                            class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             <<
                                         </a>
@@ -288,12 +292,13 @@
                                     <li th:if="${totalPage > 1}" th:each="i:${#numbers.sequence(1, totalPage)}">
                                         <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
                                            th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
-                                           th:href="@{'?pageNo=' + ${i}}" th:text="${i}">
+                                           th:text="${i}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${i}}">
                                         </a>
                                     </li>
                                     <li>
                                         <a th:if="${currentPage} < ${totalPage}"
-                                           th:href="@{'?pageNo=' + ${currentPage + 1}}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${currentPage + 1}}"
                                            class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             >>
                                         </a>
@@ -322,7 +327,7 @@
     </div>
     <script>
         function validateForm() {
-            if ( document.getElementById("fullname").value === "") {
+            if (document.getElementById("fullname").value === "") {
                 alert("Vui lòng điền đủ thông tin");
                 return false;
             }
@@ -359,7 +364,8 @@
 
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
-                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onchange="displayImage()"
+                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04"
+                               aria-label="Upload" onchange="displayImage()"
                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                     </div>
                 </div>
@@ -440,9 +446,12 @@
                         <select id="department"
                                 class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                                 th:field="*{department}">
+
                             <optgroup label="" th:each="list12 : ${list1}">
-                                <option th:text="${list12.name}" th:value="${list12.id}"></option>
+                                <option th:text="${list12.name}" th:value="${list12.id}"
+                                        th:if="${list12.id==DeptID}"></option>
                             </optgroup>
+
                         </select>
                     </div>
                 </div>
@@ -450,7 +459,7 @@
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
                         <label class="inline-block mb-2 ml-1 font-bold text-sm text-slate-800 dark:text-white/80"
-                        for="gender">
+                               for="gender">
                             Giới tính</label>
                         <select id="gender"
                                 class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
@@ -539,7 +548,7 @@
         </div>
         <hr class="h-px mt-2 bg-transparent bg-gradient-to-r from-transparent via-black/40 to-transparent dark:bg-gradient-to-r dark:from-transparent dark:via-white dark:to-transparent"/>
 
-        <button id="button_add"  type="submit"
+        <button id="button_add" type="submit"
                 class="m-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
             Thêm mới
         </button>
@@ -568,21 +577,22 @@
     }
 </script>
 <script>
-    function displayImage(){
+    function displayImage() {
         const input = document.getElementById("image_path");
         const file = input.files[0];
-        if (file){
+        if (file) {
             const reader = new FileReader();
             reader.onload = function (event) {
                 const imageDataUrl = event.target.result;
                 updateImageSrc(imageDataUrl)
             };
-            reader.onerror = function (error){
+            reader.onerror = function (error) {
                 console.error("Error", error);
             };
             reader.readAsDataURL(file)
         }
     }
+
     function updateImageSrc(imageDataUrl) {
         const img = document.getElementById("previewImage");
         img.src = imageDataUrl;

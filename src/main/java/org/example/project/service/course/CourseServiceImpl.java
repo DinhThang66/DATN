@@ -71,8 +71,34 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public Page<Course> searchCourseByName(String keyword, Integer pageNo) {
+        List<Course> list = this.searchCourseByName(keyword);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<Course>(list, pageable, this.searchCourseByName(keyword).size());
+    }
+
+    @Override
     public List<Course> searchCourseByDept(Long keyword) {
         return this.courseRepository.searchCourseByDept(keyword);
+    }
+
+    @Override
+    public Page<Course> searchCourseByDept(Long keyword, Integer pageNo) {
+        List<Course> list = this.searchCourseByDept(keyword);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<Course>(list, pageable, this.searchCourseByDept(keyword).size());
     }
 
     @Override
@@ -83,7 +109,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Page<Course> getAll(String keywordId, String keywordName, Integer pageNo) {
-        List<Course> list = this.searchCourse( keywordName, keywordId);
+        List<Course> list = this.courseRepository.searchCourse( keywordName, keywordId);
 
         Pageable pageable = PageRequest.of(pageNo - 1, 8);
 
@@ -96,7 +122,6 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Page<Course> searchDept(Long keywordDeptId, String  keywordId, String keywordName, Integer pageNo) {
-        //List<Course> list = this.searchCourseByName(keywordName);
         List<Course> list = this.searchCourse(keywordDeptId, keywordName, keywordId);
 
         Pageable pageable = PageRequest.of(pageNo - 1, 8);

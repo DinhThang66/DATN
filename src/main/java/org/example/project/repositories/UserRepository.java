@@ -38,7 +38,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Query("SELECT u FROM User u WHERE u.role = 'student' and u.department.id=?1 and (u.fullname like %?2% or u.id=?3)")
 	List<User> getStudent(Long id, String fullName, Long userId);
-
+	@Query("SELECT u FROM User u WHERE u.role = 'lecturer' and u.department.id=?1 and u.fullname like %?2%")
+	List<User> getLecturer(Long id, String fullName);
 
 	@Query("select COUNT(*) from User u where u.role = 'student'")
 	Integer numberOfAllStudents();

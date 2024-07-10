@@ -31,7 +31,8 @@ public interface UserService {
 
 	List<User> getStudent(Long id, Long userId, String fullName);
 	Page<User> getStudent(Long id, Long userId, String fullName, Integer pageNo);
-
+	List<User> getLecturer(Long id, String fullName);
+	Page<User> getLecturer(Long id, String fullName, Integer pageNo);
 	Integer numberOfAllStudents();
 	Integer numberOfAllLecturers();
 }

@@ -175,32 +175,29 @@
                     </div>
 
 
-                    <div class="flex flex-wrap">
+                    <form class="flex flex-wrap">
+                        <!--
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <input type="text" placeholder="Tìm mã giảng viên"
                                    class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
                         </div>
+                        -->
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <!-- Nội dung cột 2 -->
-                            <input type="text" placeholder="Tìm tên giảng viên"
+                            <input type="text" placeholder="Tìm tên giảng viên" name="keyword_name" th:value="${keyword_name}"
                                    class="focus:shadow-primary-outline text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"></input>
                         </div>
                         <div class="md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-xs lg:max-w-md xl:max-w-lg p-4">
                             <div class="flex flex-row">
-                                <button type="button"
+                                <button type="submit"
                                         class="inline-flex items-center px-2 py-2.5 mr-4 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-blue-500 to-violet-500 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
                                     <img th:src="@{/assets/img/ic/ic_search.svg}" class="w-5 h-5 text-white" alt="Icon">
                                     <span>Tìm kiếm</span>
                                 </button>
-                                <button type="button"
-                                        class="inline-flex items-center px-2 py-2.5 font-bold text-white uppercase align-middle transition-all rounded-lg cursor-pointer bg-gradient-to-tl from-red-600 to-orange-600 leading-normal text-xs ease-in tracking-tight-rem shadow-xs bg-150 bg-x-25 hover:-translate-y-px active:opacity-85 hover:shadow-md">
-                                    <img th:src="@{/assets/img/ic/ic_search.svg}" class="w-5 h-5 text-white" alt="Icon">
-                                    <span>Reset</span>
-                                </button>
                             </div>
                         </div>
 
-                    </div>
+                    </form>
                     <div class="flex-auto px-0 pt-0 pb-2">
                         <div class="p-0 overflow-x-auto">
                             <table class="items-center justify-center w-full mb-0 align-top border-collapse dark:border-white/40 text-slate-500">
@@ -281,7 +278,7 @@
                                 <ul class="flex items-center -space-x-px h-8 text-sm">
                                     <li>
                                         <a th:if="${currentPage} > 1"
-                                           th:href="@{'?pageNo=' + ${currentPage - 1}}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${currentPage - 1}}"
                                            class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             <<
                                         </a>
@@ -289,12 +286,13 @@
                                     <li th:if="${totalPage > 1}" th:each="i:${#numbers.sequence(1, totalPage)}">
                                         <a class="flex items-center justify-center px-3 rounded-1.4 leading-tight  border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900"
                                            th:classappend="${currentPage == i ? 'h-10 font-bold text-white bg-gradient-to-tl from-blue-500 to-violet-500 text-xl' : 'h-8 text-gray-700'}"
-                                           th:href="@{'?pageNo=' + ${i}}" th:text="${i}">
+                                           th:text="${i}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${i}}">
                                         </a>
                                     </li>
                                     <li>
                                         <a th:if="${currentPage} < ${totalPage}"
-                                           th:href="@{'?pageNo=' + ${currentPage + 1}}"
+                                           th:href="@{${keyword_name!=null && keyword_name!=''?'?keyword_name='+keyword_name+'&':'?'}+'pageNo=' + ${currentPage + 1}}"
                                            class="flex items-center justify-center px-3 h-8 rounded-1.4 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-200 hover:text-slate-700 dark:bg-gray-600 dark:border-slate-700 dark:text-white/60 dark:hover:bg-slate-900">
                                             >>
                                         </a>
@@ -346,7 +344,7 @@
                 </div>
                 <div class="w-full max-w-full px-6 pt-2 shrink-0 md:flex-0">
                     <div class="">
-                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required="required" onchange="displayImage()"
+                        <input type="file" id="image_path" name="image_path" aria-describedby="inputGroupFileAddon04" aria-label="Upload" onchange="displayImage()"
                                class="bg-white focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none">
                     </div>
                 </div>
@@ -432,7 +430,7 @@
                                 class="relative flex items-center justify-between focus:shadow-primary-outline dark:bg-slate-850 dark:text-white text-sm leading-5.6 ease block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-clip-padding px-3 py-2 font-normal text-gray-700 outline-none transition-all placeholder:text-gray-500 focus:border-blue-500 focus:outline-none"
                                 th:field="*{department}">
                             <optgroup label="" th:each="list12 : ${list1}">
-                                <option th:text="${list12.name}" th:value="${list12.id}"></option>
+                                <option th:text="${list12.name}" th:value="${list12.id}" th:if="${list12.id==DeptID}"></option>
                             </optgroup>
                         </select>
 
