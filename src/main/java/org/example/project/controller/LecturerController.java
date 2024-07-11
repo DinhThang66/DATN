@@ -114,17 +114,6 @@ public class LecturerController {
     }
 
 
-
-
-
-    @GetMapping("/")
-    public String index(Model model) {
-        String x = "dinh van thang";
-        model.addAttribute("userName", x);
-        model.addAttribute("userEmail", "markDavis@gmail.com");
-        return "fragments/navbar";
-    }
-
     @Autowired
     private ImageService imageService;
     @GetMapping("/admin_page/test")
