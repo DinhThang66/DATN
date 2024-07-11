@@ -1,5 +1,6 @@
 package org.example.project.service.courseClass;
 
+import org.example.project.model.Course;
 import org.example.project.model.CourseClass;
 import org.example.project.model.Student;
 import org.example.project.model.User;
@@ -7,6 +8,7 @@ import org.example.project.repositories.CourseClassRepository;
 import org.example.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -88,6 +90,42 @@ public class CourseClassServiceImpl implements CourseClassService {
     @Override
     public void addStudentToClass(Long classId, Long studentId) {
         this.courseClassRepository.addStudentToClass(classId, studentId);
+    }
+
+    @Override
+    public List<CourseClass> searchClassByDept(Long keyword) {
+        return this.courseClassRepository.searchClassByDept(keyword);
+    }
+
+    @Override
+    public Page<CourseClass> searchClassByDept(Long keyword, Integer pageNo) {
+        List<CourseClass> list = this.searchClassByDept(keyword);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<CourseClass>(list, pageable, this.searchClassByDept(keyword).size());
+    }
+
+    @Override
+    public List<CourseClass> searchClassByDept(String keyword1, String keyword2) {
+        return this.courseClassRepository.searchClassByDept(keyword1, keyword2);
+    }
+
+    @Override
+    public Page<CourseClass> searchClassByDept(String keyword1, String keyword2, Integer pageNo) {
+        List<CourseClass> list = this.searchClassByDept(keyword1, keyword2);
+
+        Pageable pageable = PageRequest.of(pageNo - 1, 8);
+
+        int start = (int) pageable.getOffset();
+        int end = (int) ((pageable.getOffset()+ pageable.getPageSize()) >list.size() ? list.size() : (pageable.getOffset() + pageable.getPageSize()));
+
+        list = list.subList(start, end);
+        return new PageImpl<CourseClass>(list, pageable, this.searchClassByDept(keyword1, keyword2).size());
     }
 
 

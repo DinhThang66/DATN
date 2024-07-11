@@ -19,4 +19,11 @@ public interface CourseClassService {
     void deleteStudentFromClass(Long classId, Long studentId);
     void addStudentToClass(Long classId, Long studentId);
 
+    List<CourseClass> searchClassByDept(Long keyword);
+    Page<CourseClass> searchClassByDept(Long keyword, Integer pageNo);
+
+    List<CourseClass> searchClassByDept(String keyword1, String keyword2);
+    Page<CourseClass> searchClassByDept(String keyword1, String keyword2, Integer pageNo);
+
+
 }

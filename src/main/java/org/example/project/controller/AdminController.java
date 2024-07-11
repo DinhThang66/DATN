@@ -563,9 +563,25 @@ public class AdminController {
 
     @GetMapping("admin_page/class_management")
     public String class_management(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+                                   @Param("keyword_dept") Long keyword_dept,
+                                   @Param("keyword_id") String keyword_id,
+                                   @Param("keyword_name") String keyword_name,
+
                                    Principal principal) {
         //List<CourseClass> list = this.courseClassService.getAll();
         Page<CourseClass> list = this.courseClassService.getAll(pageNo);
+        if (keyword_dept != null && keyword_dept != 0)
+            list = this.courseClassService.searchClassByDept(keyword_dept, pageNo);
+        if ((keyword_id!= null && !keyword_id.isEmpty()) ||
+                (keyword_name!= null && !keyword_name.isEmpty())){
+            list = this.courseClassService.searchClassByDept(keyword_id,keyword_name,pageNo);
+        }
+
+        model.addAttribute("keyword_dept", keyword_dept);
+        model.addAttribute("course", keyword_id);
+        model.addAttribute("lecturer", keyword_name);
+
+
         model.addAttribute("list", list);
         model.addAttribute("totalPage", list.getTotalPages());
         model.addAttribute("currentPage", pageNo);
